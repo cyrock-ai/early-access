@@ -1,0 +1,125 @@
+Cyrock.AI Beta End-User License Agreement
+
+Cyrock.AI, Inc.
+Version 1.1, November 18, 2025
+
+IMPORTANT: READ THE TERMS OF THIS AGREEMENT CAREFULLY BEFORE DOWNLOADING AND USING THE SOFTWARE. THIS IS A LICENSE FOR BETA SOFTWARE ONLY. BY DOWNLOADING, INSTALLING, COPYING, ACCESSING, OR OTHERWISE USING THE SOFTWARE, YOU AGREE TO THE TERMS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO ALL THESE TERMS, YOU MUST NOT USE THE SOFTWARE AND MUST PROMPTLY DESTROY ALL COPIES.
+
+1. DEFINITIONS.
+
+"Licensor" refers to Cyrock.AI, Inc., located in the United States, which is licensing the Software to you.
+"Licensee" refers to the individual person or the single legal entity accepting this Agreement (the "Organization").
+"Software" is the proprietary, closed-source Cyrock.AI application, in its pre-release Beta form, including all machine-readable instructions, components, documentation, and all whole or partial copies.
+"Agreement" refers to this Cyrock.AI Beta License Agreement.
+"Beta Term" means the period commencing upon the Licensee's acceptance of this Agreement and terminating as defined in Section 15.
+
+2. LICENSE GRANT.
+
+As between the parties, Licensor reserves all rights in and to the Software. Subject to the terms and conditions of this Agreement, Licensor grants Licensee a non-exclusive, worldwide, non-transferable, non-sublicensable, revocable, limited license during the Beta Term to use the Software (Beta Version) ONLY for your internal business purposes, strictly in accordance with the following terms:
+
+The license is granted per Organization, allowing internal use by all employees, contractors, and agents within the Licensee's single legal entity. The Software may be installed and used on multiple devices, internal development environments, and CI/CD machines.
+
+The Software may be used SOLELY for:
+
+Testing and Evaluation: To assess the functionality, performance, and features of the pre-release Software.
+
+Internal Development: To develop non-production proofs-of-concept, prototypes, and testing frameworks.
+
+THE FOLLOWING USES ARE STRICTLY PROHIBITED (NO PRODUCTION USE):
+
+The Software may under no circumstances be used for any revenue generation, commercial activity, or production use, including, but not limited to:
+
+Public-facing products or services.
+
+Tools used in customer workflows or critical internal infrastructure.
+
+Commercial client demonstrations or systems storing customer data.
+
+Any purpose where the stability, security, or accuracy of the results is critical.
+
+3. RESTRICTIONS.
+
+3.1. Proprietary Notices. The Software is owned by the Licensor, confidential, copyrighted, and licensed, not sold. Title to the Software and all associated intellectual property rights are retained by Cyrock.AI, Inc.
+
+3.2. Reverse Engineering. THE LICENSEE MAY NOT REVERSE ENGINEER, DECOMPILE OR DISASSEMBLE THE SOFTWARE, OR DETERMINE OR ATTEMPT TO DETERMINE ANY SOURCE CODE, ALGORITHMS, METHODS OR TECHNIQUES EMBODIED IN THE SOFTWARE. THE LICENSEE MAY NOT MODIFY, ADAPT, TRANSLATE, RENT, LEASE, RESELL, SUBLICENSE, DISTRIBUTE, LOAN OR CREATE DERIVATIVE WORKS BASED UPON THE SOFTWARE OR ANY PART THEREOF.
+
+3.3. High-Risk Activities. The Licensee acknowledges that the Software is not intended for use in high-risk activities, including the design, construction, operation, or maintenance of any nuclear facilities, aircraft navigation or communication systems, air traffic control systems, life support systems, or any other equipment where the failure of the Software could lead to death, personal injury, or severe physical or environmental damage. Licensor disclaims any express or implied warranty of fitness for such uses.
+
+3.4. No Data Collection / Local-Only Operation. The Software operates entirely locally on the Licenseeâ€™s systems. Cyrock.AI does not collect, transmit, or store any user data, database content, or telemetry by default. An exception is granted only if future versions of the Software include a clearly marked, optional, and opt-in telemetry feature, which will require renewed consent.
+
+3.5. No Benchmarking. The Licensee may not publish or disclose performance benchmarks or comparative evaluations of the Software to any third party without Licensorâ€™s prior written consent.
+
+3.6. Redistribution Restrictions. Embedding the Software into any application or product intended for distribution, shipment, or external access outside the Licenseeâ€™s internal Organization is strictly prohibited.
+
+4. TRANSFER.
+
+The Licensee may not transfer or assign its rights under this license to another party without Licensor's prior written consent.
+
+5. CHANGES TO THIS AGREEMENT.
+
+The Licensor reserves the right at its discretion to change, modify, add, or remove terms of use of this Agreement at any time. Any material change will be notified to the Licensee by an announcement on the www.cyrock.ai website or through the Software interface. Such changes shall apply to all subsequent releases of the Software. Continued use of the Software after the release of the updated version and notification constitutes acceptance of the modified terms.
+
+6. TERMINATION.
+
+This Agreement is effective until terminated.
+
+The Licensee may terminate this Agreement at any time by destroying all copies of the Software.
+
+This Agreement will terminate immediately without notice from Licensor if the Licensee fails to comply with any provision of this Agreement.
+
+Upon termination, the Licensee must immediately cease all use of the Software and destroy all copies of the Software and all related materials.
+
+7. EXPORT REGULATIONS.
+
+The Licensee may not use or otherwise export or re-export the Software except as authorized by United States law and the laws of the jurisdiction in which the Software was obtained. By using the Software, you represent and warrant that you are not located in any country or on any list restricted by applicable export control laws.
+
+8. LIMITED WARRANTIES AND DISCLAIMERS (BETA SOFTWARE).
+
+THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE," WITH ALL FAULTS. LICENSOR AND ITS LICENSORS EXPRESSLY DISCLAIM ALL WARRANTIES, CONDITIONS OR OTHER TERMS, EITHER EXPRESS OR IMPLIED (WHETHER COLLATERALLY, BY STATUTE OR OTHERWISE), INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES, CONDITIONS OR OTHER TERMS OF MERCHANTABILITY, SATISFACTORY QUALITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
+
+LICENSOR DOES NOT WARRANT THAT THE OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED OR ERROR-FREE, SECURE, OR THAT DEFECTS IN THE SOFTWARE WILL BE CORRECTED. SINCE THE SOFTWARE IS A PRE-RELEASE BETA VERSION, ITS USE IS AT THE LICENSEE'S SOLE RISK.
+
+DISCLAIMER OF DATA LOSS. THE LICENSEE ACKNOWLEDGES THAT THE SOFTWARE, AS A BETA PRODUCT, MAY CONTAIN BUGS OR INSTABILITIES THAT COULD CAUSE CORRUPTION OR LOSS OF DATA STORED WITHIN TEST OR DEVELOPMENT ENVIRONMENTS. THE LICENSEE IS SOLELY RESPONSIBLE FOR MAINTAINING ADEQUATE BACKUPS OF ALL DATA USED IN CONNECTION WITH THE SOFTWARE.
+
+9. LIABILITY.
+
+LICENSOR SHALL NOT BE LIABLE FOR ANY DAMAGES, INCLUDING CONSEQUENTIAL DAMAGES, LOSS OF INCOME, BUSINESS OR PROFIT, SPECIAL, INDIRECT OR INCIDENTAL DAMAGES WHATSOEVER (INCLUDING WITHOUT LIMITATION, DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS INTERRUPTION, LOSS OF BUSINESS INFORMATION AND THE LIKE) OR DIRECT LOSS OF BUSINESS, BUSINESS PROFITS OR REVENUE, WHETHER FORESEEABLE OR UNFORESEEABLE, ARISING OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE. LICENSEE INDEMNIFIES LICENSOR AGAINST ANY CLAIM OF THIRD PARTIES DUE TO THE USE OF THE SOFTWARE.
+
+10. EXCLUSION AND LIMITATIONS OF REMEDIES AND DAMAGES.
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT WILL CYROCK.AI, INC. OR ANY OF ITS AFFILIATES BE LIABLE TO YOU FOR ANY DAMAGES WHATSOEVER EXCEEDING THE GREATER OF U.S.$5.00 OR THE MONEY PAID FOR THE SOFTWARE (WHICH IS ASSUMED TO BE $0.00 FOR BETA ACCESS) IN THE 12 MONTHS PRIOR TO THE EVENT GIVING RISE TO THIS LIABILITY.
+
+11. GENERAL.
+
+This License constitutes the entire Agreement between Licensor and Licensee with respect to the Software licensed under these terms, and it supersedes all prior or contemporaneous agreements.
+
+12. APPLICABLE LAW AND COURT OF JURISDICTION.
+
+This Agreement shall be governed, subjected to, and construed in accordance with the laws of the State of Delaware, USA, without regard to its conflict of laws principles. All disputes arising from and/or in connection with the present Agreement shall exclusively be brought before the competent state or federal courts located in the State of Delaware.
+
+13. FEEDBACK OWNERSHIP.
+
+The Licensee may, but is not obligated to, provide feedback, suggestions, bug reports, or technical information regarding the operation or features of the Software ("Feedback"). All Feedback shall be deemed non-confidential and shall become the sole property of Cyrock.AI, Inc. Licensor shall be entitled to use and implement the Feedback without restriction, compensation, or any obligation of confidentiality or attribution to the Licensee.
+
+14. SURVIVAL.
+
+Sections 3 (Restrictions), 6 (Termination), 8 (Warranties and Disclaimers), 9 (Liability), 10 (Exclusion and Limitations of Remedies and Damages), 12 (Applicable Law and Court of Jurisdiction), 13 (Feedback Ownership), 15 (Beta Program Term and Termination), 16 (No Waiver), and 17 (Severability) shall survive any termination or expiration of this Agreement.
+
+15. BETA PROGRAM TERM AND TERMINATION.
+
+This Agreement grants the Licensee a limited, non-exclusive, and non-transferable license to use the Software during the Beta Program Period ("Beta Term"). The Beta Term will commence upon the Licensee's acceptance of the terms of this Agreement and will continue until the earlier of:
+
+(a) The date Cyrock.AI, Inc. publicly announces the commercial release (General Availability) of the Software on its website, www.cyrock.ai; or
+(b) Termination by either party as set forth in Section 6.
+
+Upon termination of the Beta Term, this license shall immediately terminate, and the Licensee must discontinue all use of the Software.
+
+16. NO WAIVER.
+
+The failure of either party to enforce any right or provision of this Agreement will not constitute a waiver of future enforcement of that right or provision.
+
+17. SEVERABILITY.
+
+If any provision of this Agreement is held by a court of competent jurisdiction to be contrary to law, that provision will be enforced to the maximum extent permissible, and the remaining provisions of this Agreement will remain in full force and effect.
+
+END OF TERMS AND CONDITIONS
