@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ai.cyrock</groupId>
+    <artifactId>early-access</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!--
+    Remember to add GitHub credentials to maven config (settings.xml)
+    https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#installing-a-package
+    -->
+    <repositories>
+        <repository>
+            <id>cyrock-early-access</id>
+            <name>GitHub CYROCK Early Access Packages</name>
+            <url>https://maven.pkg.github.com/cyrock-ai/early-access</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>ai.cyrock</groupId>
+            <artifactId>vector-index</artifactId>
+            <version>0.1.1</version>
+        </dependency>
+    </dependencies>
+
+
+</project>
