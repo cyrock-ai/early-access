@@ -58,31 +58,29 @@ Key roles:
 
 ## Modules overview
 - core — foundational abstractions: `Vector`, `Vectorizer`, `Metadata`, `VectorStore`, `VectorSearch*`, `SimilaritySearch*`, CDC helpers (`DataChange*`, `DataIdProvider`, `VectorStoreUpdater`).
-    - Details and examples: core/README.md
+    - [Details and examples](core/README.md)
 - qdrant — concrete `VectorStore<String, Vector.Float>` backed by Qdrant: insert/search/delete and payload mapping from/to `Metadata`.
-    - How‑to and examples: qdrant/README.md
+    - [How‑to and examples](qdrant/README.md)
 - spring — adapters to use Spring Data repositories as Core `DataRetriever<ID>` for natural‑data similarity search.
-    - Usage and config examples: spring/README.md
+    - [Usage and config examples](spring/README.md)
 - debezium — runs Debezium Embedded and forwards CDC events as Core `DataChange` to your pipeline.
-    - Setup and properties examples: debezium/README.md
+    - [Setup and properties examples](debezium/README.md)
 - pinecone — concrete `VectorStore<String, Vector.Float>` backed by Pinecone (Java SDK v6.x for API 2025-10).
-    - How‑to and examples: pinecone/README.md
+    - [How‑to and examples](pinecone/README.md)
 - pgvector — concrete `VectorStore<String, Vector.Float>` backed by pgvector (PostgreSQL extension).
-    - How‑to and examples: pgvector/README.md
+    - [How‑to and examples](pgvector/README.md)
 - weaviate — concrete `VectorStore<String, Vector.Float>` backed by Weaviate.
-    - How‑to and examples: weaviate/README.md
+    - [How‑to and examples](weaviate/README.md)
 - milvus — concrete `VectorStore<String, Vector.Float>` backed by Milvus.
-    - How‑to and examples: milvus/README.md
+    - [How‑to and examples](milvus/README.md)
 - vectralink-debezium-spring — Spring Boot auto‑configuration for Debezium CDC integration with bean validation.
-    - Setup and examples: vectralink-debezium-spring/README.md
+    - [Setup and examples](vectralink-debezium-spring/README.md)
 - demo — runnable end‑to‑end example (Spring Boot + Vaadin + Testcontainers for MySQL <-> Qdrant/Pinecone/Weaviate/pgvector/Milvus).
-    - Walkthrough and commands: demo/README.md
+    - [Walkthrough and commands](demo/README.md)
 - demo-bet-app — sports betting domain demo with full Vectralink CDC pipeline (Debezium → Qdrant).
-    - Domain model and API: demo-bet-app/README.md
+    - [Domain model and API](demo-bet-app/README.md)
 - langchain4j — placeholder for future adapters to use LangChain4j embedders as Core `Vectorizer` implementations.
-    - Status and intent: langchain4j/README.md
-- it — currently a playground; will become the comprehensive integration test suite for the full pipeline.
-    - Vision and conventions: it/README.md
+    - [Status and intent](langchain4j/README.md)
 
 ## Quick start (build & run the demo)
 Prerequisites:
@@ -186,7 +184,6 @@ For a deeper introduction and more examples, see core/README.md.
 - demo — runnable app wiring everything together (multiple vector DB profiles)
 - demo-bet-app — sports betting domain demo with full CDC pipeline
 - langchain4j — future LangChain4j integrations (placeholder)
-- it — integration tests (future), currently a playground
 
 ## Roadmap and future work
 - Additional connectors/stores (e.g., MongoDB, Elasticsearch)
