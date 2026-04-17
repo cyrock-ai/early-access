@@ -34,4 +34,4 @@ Now you can use the [CYROCK packages](https://github.com/orgs/cyrock-ai/packages
 
 Currently available packages:
 
-- [Vectralink](vectralink/README.md)
+[<img src="vectralink/etc/vectralink-logo-with-text.svg" alt="Vectralink Logo" width="500" />](vectralink/README.md)
