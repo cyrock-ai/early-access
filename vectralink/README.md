@@ -57,30 +57,18 @@ Key roles:
 - DebeziumConnector: streams DB changes into the Core pipeline.
 
 ## Modules overview
-- core — foundational abstractions: `Vector`, `Vectorizer`, `Metadata`, `VectorStore`, `VectorSearch*`, `SimilaritySearch*`, CDC helpers (`DataChange*`, `DataIdProvider`, `VectorStoreUpdater`).
-    - [Details and examples](core/README.md)
-- qdrant — concrete `VectorStore<String, Vector.Float>` backed by Qdrant: insert/search/delete and payload mapping from/to `Metadata`.
-    - [How‑to and examples](qdrant/README.md)
-- spring — adapters to use Spring Data repositories as Core `DataRetriever<ID>` for natural‑data similarity search.
-    - [Usage and config examples](spring/README.md)
-- debezium — runs Debezium Embedded and forwards CDC events as Core `DataChange` to your pipeline.
-    - [Setup and properties examples](debezium/README.md)
-- pinecone — concrete `VectorStore<String, Vector.Float>` backed by Pinecone (Java SDK v6.x for API 2025-10).
-    - [How‑to and examples](pinecone/README.md)
-- pgvector — concrete `VectorStore<String, Vector.Float>` backed by pgvector (PostgreSQL extension).
-    - [How‑to and examples](pgvector/README.md)
-- weaviate — concrete `VectorStore<String, Vector.Float>` backed by Weaviate.
-    - [How‑to and examples](weaviate/README.md)
-- milvus — concrete `VectorStore<String, Vector.Float>` backed by Milvus.
-    - [How‑to and examples](milvus/README.md)
-- vectralink-debezium-spring — Spring Boot auto‑configuration for Debezium CDC integration with bean validation.
-    - [Setup and examples](vectralink-debezium-spring/README.md)
-- demo — runnable end‑to‑end example (Spring Boot + Vaadin + Testcontainers for MySQL <-> Qdrant/Pinecone/Weaviate/pgvector/Milvus).
-    - [Walkthrough and commands](demo/README.md)
-- demo-bet-app — sports betting domain demo with full Vectralink CDC pipeline (Debezium → Qdrant).
-    - [Domain model and API](demo-bet-app/README.md)
-- langchain4j — placeholder for future adapters to use LangChain4j embedders as Core `Vectorizer` implementations.
-    - [Status and intent](langchain4j/README.md)
+- [core](core/README.md) — foundational abstractions: `Vector`, `Vectorizer`, `Metadata`, `VectorStore`, `VectorSearch*`, `SimilaritySearch*`, CDC helpers (`DataChange*`, `DataIdProvider`, `VectorStoreUpdater`).
+- [qdrant](qdrant/README.md) — concrete `VectorStore<String, Vector.Float>` backed by Qdrant: insert/search/delete and payload mapping from/to `Metadata`.
+- [spring](spring/README.md) — adapters to use Spring Data repositories as Core `DataRetriever<ID>` for natural‑data similarity search.
+- [debezium](debezium/README.md) — runs Debezium Embedded and forwards CDC events as Core `DataChange` to your pipeline.
+- [pinecone](pinecone/README.md) — concrete `VectorStore<String, Vector.Float>` backed by Pinecone (Java SDK v6.x for API 2025-10).
+- [pgvector](pgvector/README.md) — concrete `VectorStore<String, Vector.Float>` backed by pgvector (PostgreSQL extension).
+- [weaviate](weaviate/README.md) — concrete `VectorStore<String, Vector.Float>` backed by Weaviate.
+- [milvus](milvus/README.md) — concrete `VectorStore<String, Vector.Float>` backed by Milvus.
+- [vectralink-debezium-spring](vectralink-debezium-spring/README.md) — Spring Boot auto‑configuration for Debezium CDC integration with bean validation.
+- [demo](demo/README.md) — runnable end‑to‑end example (Spring Boot + Vaadin + Testcontainers for MySQL <-> Qdrant/Pinecone/Weaviate/pgvector/Milvus).
+- [demo-bet-app](demo-bet-app/README.md) — sports betting domain demo with full Vectralink CDC pipeline (Debezium → Qdrant).
+- [langchain4j](langchain4j/README.md) — placeholder for future adapters to use LangChain4j embedders as Core `Vectorizer` implementations.
 
 ## Quick start (build & run the demo)
 Prerequisites:
