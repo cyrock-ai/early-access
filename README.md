@@ -28,4 +28,10 @@ Add the following repository.
 </repositories>
 ```
 
-Now you can use the [CYROCK libraries](https://github.com/orgs/cyrock-ai/packages?repo_name=early-access).
+Now you can use the [CYROCK packages](https://github.com/orgs/cyrock-ai/packages?repo_name=early-access).
+
+---
+
+Currently available packages:
+
+- [Vectralink](vectralink.md)
