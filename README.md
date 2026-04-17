@@ -34,4 +34,4 @@ Now you can use the [CYROCK packages](https://github.com/orgs/cyrock-ai/packages
 
 Currently available packages:
 
-- [Vectralink](vectralink.md)
+- [Vectralink](vectralink/README.md)
