@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="vectralink-logo-with-text.svg" alt="Vectralink Logo" width="500" />
+  <img src="etc/vectralink-logo-with-text.svg" alt="Vectralink Logo" width="500" />
 </p>
 
 <p align="center">
