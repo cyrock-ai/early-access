@@ -28,10 +28,8 @@ Add the following repository.
 </repositories>
 ```
 
-Now you can use the [CYROCK packages](https://github.com/orgs/cyrock-ai/packages?repo_name=early-access).
+Now you can use the [CYROCK packages](https://github.com/orgs/cyrock-ai/packages?repo_name=early-access):
 
 ---
-
-Currently available packages:
 
 [<img src="vectralink/etc/vectralink-logo-with-text.svg" alt="Vectralink Logo" width="500" />](vectralink/README.md)
