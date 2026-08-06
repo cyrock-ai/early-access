@@ -1,4 +1,4 @@
-CYROCK.AI Beta End-User License Agreement
+CYROCK.AI Early Access End-User License Agreement
 
 CYROCK.AI GmbH
 Version 1.1, November 18, 2025
@@ -9,13 +9,13 @@ IMPORTANT: READ THE TERMS OF THIS AGREEMENT CAREFULLY BEFORE DOWNLOADING AND USI
 
 "Licensor" refers to CYROCK.AI GmbH., located in Germany, which is licensing the Software to you.
 "Licensee" refers to the individual person or the single legal entity accepting this Agreement (the "Organization").
-"Software" is the proprietary, closed-source CYROCK.AI application, in its pre-release Beta form, including all machine-readable instructions, components, documentation, and all whole or partial copies.
-"Agreement" refers to this CYROCK.AI Beta License Agreement.
-"Beta Term" means the period commencing upon the Licensee's acceptance of this Agreement and terminating as defined in Section 15.
+"Software" is the proprietary, closed-source CYROCK.AI application, in its pre-release Early Access form, including all machine-readable instructions, components, documentation, and all whole or partial copies.
+"Agreement" refers to this CYROCK.AI Early Access License Agreement.
+"Early Access Term" means the period commencing upon the Licensee's acceptance of this Agreement and terminating as defined in Section 15.
 
 2. LICENSE GRANT.
 
-As between the parties, Licensor reserves all rights in and to the Software. Subject to the terms and conditions of this Agreement, Licensor grants Licensee a non-exclusive, worldwide, non-transferable, non-sublicensable, revocable, limited license during the Beta Term to use the Software (Beta Version) ONLY for your internal business purposes, strictly in accordance with the following terms:
+As between the parties, Licensor reserves all rights in and to the Software. Subject to the terms and conditions of this Agreement, Licensor grants Licensee a non-exclusive, worldwide, non-transferable, non-sublicensable, revocable, limited license during the Early Access Term to use the Software (Early Access Version) ONLY for your internal business purposes, strictly in accordance with the following terms:
 
 The license is granted per Organization, allowing internal use by all employees, contractors, and agents within the Licensee's single legal entity. The Software may be installed and used on multiple devices, internal development environments, and CI/CD machines.
 
@@ -73,13 +73,13 @@ Upon termination, the Licensee must immediately cease all use of the Software an
 
 The Licensee may not use or otherwise export or re-export the Software except as authorized by United States law and the laws of the jurisdiction in which the Software was obtained. By using the Software, you represent and warrant that you are not located in any country or on any list restricted by applicable export control laws.
 
-8. LIMITED WARRANTIES AND DISCLAIMERS (BETA SOFTWARE).
+8. LIMITED WARRANTIES AND DISCLAIMERS (EARLY ACCESS SOFTWARE).
 
 THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE," WITH ALL FAULTS. LICENSOR AND ITS LICENSORS EXPRESSLY DISCLAIM ALL WARRANTIES, CONDITIONS OR OTHER TERMS, EITHER EXPRESS OR IMPLIED (WHETHER COLLATERALLY, BY STATUTE OR OTHERWISE), INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES, CONDITIONS OR OTHER TERMS OF MERCHANTABILITY, SATISFACTORY QUALITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 
-LICENSOR DOES NOT WARRANT THAT THE OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED OR ERROR-FREE, SECURE, OR THAT DEFECTS IN THE SOFTWARE WILL BE CORRECTED. SINCE THE SOFTWARE IS A PRE-RELEASE BETA VERSION, ITS USE IS AT THE LICENSEE'S SOLE RISK.
+LICENSOR DOES NOT WARRANT THAT THE OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED OR ERROR-FREE, SECURE, OR THAT DEFECTS IN THE SOFTWARE WILL BE CORRECTED. SINCE THE SOFTWARE IS A PRE-RELEASE EARLY ACCESS VERSION, ITS USE IS AT THE LICENSEE'S SOLE RISK.
 
-DISCLAIMER OF DATA LOSS. THE LICENSEE ACKNOWLEDGES THAT THE SOFTWARE, AS A BETA PRODUCT, MAY CONTAIN BUGS OR INSTABILITIES THAT COULD CAUSE CORRUPTION OR LOSS OF DATA STORED WITHIN TEST OR DEVELOPMENT ENVIRONMENTS. THE LICENSEE IS SOLELY RESPONSIBLE FOR MAINTAINING ADEQUATE BACKUPS OF ALL DATA USED IN CONNECTION WITH THE SOFTWARE.
+DISCLAIMER OF DATA LOSS. THE LICENSEE ACKNOWLEDGES THAT THE SOFTWARE, AS A EARLY ACCESS PRODUCT, MAY CONTAIN BUGS OR INSTABILITIES THAT COULD CAUSE CORRUPTION OR LOSS OF DATA STORED WITHIN TEST OR DEVELOPMENT ENVIRONMENTS. THE LICENSEE IS SOLELY RESPONSIBLE FOR MAINTAINING ADEQUATE BACKUPS OF ALL DATA USED IN CONNECTION WITH THE SOFTWARE.
 
 9. LIABILITY.
 
@@ -87,7 +87,7 @@ LICENSOR SHALL NOT BE LIABLE FOR ANY DAMAGES, INCLUDING CONSEQUENTIAL DAMAGES, L
 
 10. EXCLUSION AND LIMITATIONS OF REMEDIES AND DAMAGES.
 
-TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT WILL CYROCK.AI, INC. OR ANY OF ITS AFFILIATES BE LIABLE TO YOU FOR ANY DAMAGES WHATSOEVER EXCEEDING THE GREATER OF U.S.$5.00 OR THE MONEY PAID FOR THE SOFTWARE (WHICH IS ASSUMED TO BE $0.00 FOR BETA ACCESS) IN THE 12 MONTHS PRIOR TO THE EVENT GIVING RISE TO THIS LIABILITY.
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT WILL CYROCK.AI, INC. OR ANY OF ITS AFFILIATES BE LIABLE TO YOU FOR ANY DAMAGES WHATSOEVER EXCEEDING THE GREATER OF U.S.$5.00 OR THE MONEY PAID FOR THE SOFTWARE (WHICH IS ASSUMED TO BE $0.00 FOR EARLY ACCESS ACCESS) IN THE 12 MONTHS PRIOR TO THE EVENT GIVING RISE TO THIS LIABILITY.
 
 11. GENERAL.
 
@@ -103,16 +103,16 @@ The Licensee may, but is not obligated to, provide feedback, suggestions, bug re
 
 14. SURVIVAL.
 
-Sections 3 (Restrictions), 6 (Termination), 8 (Warranties and Disclaimers), 9 (Liability), 10 (Exclusion and Limitations of Remedies and Damages), 12 (Applicable Law and Court of Jurisdiction), 13 (Feedback Ownership), 15 (Beta Program Term and Termination), 16 (No Waiver), and 17 (Severability) shall survive any termination or expiration of this Agreement.
+Sections 3 (Restrictions), 6 (Termination), 8 (Warranties and Disclaimers), 9 (Liability), 10 (Exclusion and Limitations of Remedies and Damages), 12 (Applicable Law and Court of Jurisdiction), 13 (Feedback Ownership), 15 (Early Access Program Term and Termination), 16 (No Waiver), and 17 (Severability) shall survive any termination or expiration of this Agreement.
 
-15. BETA PROGRAM TERM AND TERMINATION.
+15. EARLY ACCESS PROGRAM TERM AND TERMINATION.
 
-This Agreement grants the Licensee a limited, non-exclusive, and non-transferable license to use the Software during the Beta Program Period ("Beta Term"). The Beta Term will commence upon the Licensee's acceptance of the terms of this Agreement and will continue until the earlier of:
+This Agreement grants the Licensee a limited, non-exclusive, and non-transferable license to use the Software during the Early Access Program Period ("Early Access Term"). The Early Access Term will commence upon the Licensee's acceptance of the terms of this Agreement and will continue until the earlier of:
 
 (a) The date CYROCK.AI GmbH publicly announces the commercial release (General Availability) of the Software on its website, www.cyrock.ai; or
 (b) Termination by either party as set forth in Section 6.
 
-Upon termination of the Beta Term, this license shall immediately terminate, and the Licensee must discontinue all use of the Software.
+Upon termination of the Early Access Term, this license shall immediately terminate, and the Licensee must discontinue all use of the Software.
 
 16. NO WAIVER.
 
