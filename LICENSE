@@ -27,7 +27,7 @@ Internal Development: To develop non-production proofs-of-concept, prototypes, a
 
 THE FOLLOWING USES ARE STRICTLY PROHIBITED (NO PRODUCTION USE):
 
-The Software may under no circumstances be used for any revenue generation, commercial activity, or production use, CYROCK.AIluding, but not limited to:
+The Software may under no circumstances be used for any revenue generation, commercial activity, or production use, including, but not limited to:
 
 Public-facing products or services.
 
@@ -45,11 +45,11 @@ Any purpose where the stability, security, or accuracy of the results is critica
 
 3.3. High-Risk Activities. The Licensee acknowledges that the Software is not intended for use in high-risk activities, including the design, construction, operation, or maintenance of any nuclear facilities, aircraft navigation or communication systems, air traffic control systems, life support systems, or any other equipment where the failure of the Software could lead to death, personal injury, or severe physical or environmental damage. Licensor disclaims any express or implied warranty of fitness for such uses.
 
-3.4. No Data Collection / Local-Only Operation. The Software operates entirely locally on the Licenseeâ€™s systems. CYROCK.AI does not collect, transmit, or store any user data, database content, or telemetry by default. An exception is granted only if future versions of the Software include a clearly marked, optional, and opt-in telemetry feature, which will require renewed consent.
+3.4. No Data Collection / Local-Only Operation. The Software operates entirely locally on the Licensee's systems. CYROCK.AI does not collect, transmit, or store any user data, database content, or telemetry by default. An exception is granted only if future versions of the Software include a clearly marked, optional, and opt-in telemetry feature, which will require renewed consent.
 
 3.5. No Benchmarking. The Licensee may not publish or disclose performance benchmarks or comparative evaluations of the Software to any third party without Licensorâ€™s prior written consent.
 
-3.6. Redistribution Restrictions. Embedding the Software into any application or product intended for distribution, shipment, or external access outside the Licenseeâ€™s internal Organization is strictly prohibited.
+3.6. Redistribution Restrictions. Embedding the Software into any application or product intended for distribution, shipment, or external access outside the Licensee's internal Organization is strictly prohibited.
 
 4. TRANSFER.
 
@@ -87,7 +87,7 @@ LICENSOR SHALL NOT BE LIABLE FOR ANY DAMAGES, INCLUDING CONSEQUENTIAL DAMAGES, L
 
 10. EXCLUSION AND LIMITATIONS OF REMEDIES AND DAMAGES.
 
-TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT WILL CYROCK.AI, INC. OR ANY OF ITS AFFILIATES BE LIABLE TO YOU FOR ANY DAMAGES WHATSOEVER EXCEEDING THE GREATER OF U.S.$5.00 OR THE MONEY PAID FOR THE SOFTWARE (WHICH IS ASSUMED TO BE $0.00 FOR EARLY ACCESS ACCESS) IN THE 12 MONTHS PRIOR TO THE EVENT GIVING RISE TO THIS LIABILITY.
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT WILL CYROCK.AI GmbH. OR ANY OF ITS AFFILIATES BE LIABLE TO YOU FOR ANY DAMAGES WHATSOEVER EXCEEDING THE GREATER OF U.S.$5.00 OR THE MONEY PAID FOR THE SOFTWARE (WHICH IS ASSUMED TO BE $0.00 FOR EARLY ACCESS ACCESS) IN THE 12 MONTHS PRIOR TO THE EVENT GIVING RISE TO THIS LIABILITY.
 
 11. GENERAL.
 
