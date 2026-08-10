@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="db/etc/cyrock-ai-db-logo.svg" alt="CYROCK.AI" width="500" />
+  <img src="assets/cyrock-ai-logo.svg" alt="CYROCK.AI" width="500" />
 </p>
 
 <h1 align="center">Early Access Products</h1>
