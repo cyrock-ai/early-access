@@ -5,7 +5,8 @@ code deals in collections and documents rather than in headers.
 
 > **Early Access scope.** The SDK is licensed for evaluation and internal prototyping. It may not be
 > embedded in anything you distribute or expose outside your own organization. Build with it freely
-> inside your own walls; talk to us before it becomes part of something you ship.
+> inside your own walls; [start a discussion](https://github.com/cyrock-ai/early-access/discussions)
+> before it becomes part of something you ship.
 
 ## Adding the dependency
 

@@ -64,17 +64,33 @@ Documents in collections have no labels; they are the simpler shape by design.
 and graphs. Everything you create belongs to a project, which is why the project ID appears in API
 paths and in the startup banner.
 
-Access is role-based, and the evaluation image seeds one login per role so you can see the
-differences:
+A **person** gets access through a membership, which carries one of four roles. Each is a strict
+superset of the one below it - broadly:
 
-| Login | Role | Can |
-|---|---|---|
-| `superadmin` / `superadmin` | OWNER | Everything, including organization settings and user management. |
-| `defaultadmin` / `defaultadmin` | ADMIN | Manage projects, collections, graphs and data. |
-| `member` / `member` | MEMBER | Read and write data in projects they belong to. |
+| Role | Can |
+|---|---|
+| VIEWER | Read and search collections, documents and graphs, and subscribe to change streams. No writes. |
+| MEMBER | Everything VIEWER can, plus full CRUD on collections, documents and graphs, and graph branching. |
+| ADMIN | Everything MEMBER can, plus management of projects, members, users, API keys, service identities and CDC sinks, and the audit log. |
+| OWNER | Everything ADMIN can, plus organization settings. |
 
-Roles apply uniformly. An API key or an MCP tool call is subject to exactly the same permissions as
-the console, so an agent cannot reach past the role of the key it was given.
+That is a summary rather than the full permission set - each role bundles a list of individual
+permissions, and the console shows exactly which.
+
+An **API key** works differently: it carries its own explicit set of permissions rather than a role,
+so a key can be narrower than any role. That is what makes it safe to hand one to an agent - see
+[MCP](mcp.md). Whatever the key holds applies uniformly, so a call through the REST API, the SDK or an
+MCP tool can never reach past it.
+
+The evaluation image seeds three logins so you can compare the roles side by side. VIEWER is not
+among them; add a membership with that role in the console if you want to see a read-only person, or
+create an API key holding only the read permissions.
+
+| Login | Role |
+|---|---|
+| `superadmin` / `superadmin` | OWNER |
+| `defaultadmin` / `defaultadmin` | ADMIN |
+| `member` / `member` | MEMBER |
 
 ## Authentication
 

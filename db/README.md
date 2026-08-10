@@ -23,9 +23,6 @@ Please read this first - it shapes what you may do with the software.
 - **Not for production.** Early Access is licensed for evaluation and internal, non-production
   development only. The evaluation image runs the whole engine in a single JVM with seeded,
   in-memory logins, so it is genuinely not built for production use.
-- **Please do not publish benchmarks.** The licence does not permit publishing performance
-  benchmarks or comparative evaluations without written consent. We are glad to discuss numbers
-  with you directly - just talk to us before publishing anything.
 - **Do not redistribute or embed.** The software may not be embedded in anything you ship or expose
   outside your own organization. The Java SDK is for evaluation and internal prototyping.
 - **One container.** This release ships as a single all-in-one image. The multi-service deployment
@@ -101,8 +98,15 @@ Start at the top; the first chapter gets you running in a few minutes.
 ## Support and feedback
 
 Early Access exists so we can hear what does and does not work for you. Bug reports, rough edges,
-missing capabilities and "this was confusing" are all equally welcome - please send them through the
-support channel you were given with your Early Access invitation.
+missing capabilities and "this was confusing" are all equally welcome.
+
+Both channels live in the Early Access repository:
+
+- **[Issues](https://github.com/cyrock-ai/early-access/issues)** - something is broken, or behaves
+  differently from what this manual says.
+- **[Discussions](https://github.com/cyrock-ai/early-access/discussions)** - questions, ideas, "how
+  would I model this", and anything you are not sure is a bug.
 
 One thing worth knowing: under the Early Access agreement, feedback you send us becomes ours to act
-on freely, so please do not include anything confidential to your organization in a report.
+on freely. Both channels are also public, so please keep anything confidential to your organization
+out of a report - and out of the logs you attach to one.

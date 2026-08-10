@@ -5,9 +5,13 @@ distributed: their documentation lives here, and their Java artifacts are publis
 repository's GitHub Packages registry.
 
 Everything here is pre-release software licensed for evaluation and internal, non-production use.
-Please read the [licence](./LICENSE) before you start - it is short, and two of its terms are easy to
-trip over: no production or revenue-generating use, and no publishing benchmarks or comparisons
-without our written consent. We are always happy to discuss performance with you directly.
+Please read the [licence](./LICENSE) before you start - it is short, and the term easiest to trip over
+is that it covers no production or revenue-generating use.
+
+Questions and feedback belong in this repository:
+[issues](https://github.com/cyrock-ai/early-access/issues) when something is broken, and
+[discussions](https://github.com/cyrock-ai/early-access/discussions) for everything else. Both are
+public, so please keep anything confidential to your organization out of them.
 
 ## Products
 

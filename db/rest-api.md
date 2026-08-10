@@ -122,7 +122,7 @@ curl -sS -X POST "http://localhost:8082/api/v1/collections/$COLLECTION_ID/search
   -H "Content-Type: application/json" \
   -d '{
         "vectorField": "vector",
-        "vector": [0.01, 0.02, "... 384 values ..."],
+        "vector": [0.01, 0.02, 0.03],
         "maxResults": 5,
         "filter": "topic = \"accounts\""
       }'
@@ -132,9 +132,19 @@ curl -sS -X POST "http://localhost:8082/api/v1/collections/$COLLECTION_ID/search
 {"matches": []}
 ```
 
-The vector must have exactly the dimension the field was created with - a shorter one is rejected with
-`400`. The filter narrows candidates before ranking, so a restrictive filter still yields a full
+The `vector` array above is shortened to keep the example readable. It must hold **exactly** as many
+numbers as the field's dimension - 384 for the collection created earlier - and a shorter one is
+rejected with a `400` saying so. In practice you are pasting an embedding from your model rather than
+typing numbers, so this is usually a matter of piping one in rather than composing it by hand.
+
+The filter narrows candidates before ranking, so a restrictive filter still yields a full
 `maxResults`.
+
+`maxResults` is optional - leave it out and you get 10. That holds for the multi-, hybrid- and
+natural-language searches too. Optional fields generally can be left out rather than spelled with a
+placeholder value: the exceptions are the few where an omitted value would be destructive or meaningless,
+such as `maxAgeHours` on `POST /api/v1/graphs/{id}/decay`, which is required because a zero age would prune
+the whole graph. Those answer with a `400` naming the field.
 
 ### Documents and CyQL statements
 
@@ -142,7 +152,7 @@ The remaining data-plane endpoints follow the same pattern - data port, bearer t
 
 | Endpoint | Purpose |
 |---|---|
-| `POST /api/v1/collections/{id}/documents` | Upsert a document (`metadata`, `vectors`, optional `externalKey`) |
+| `POST /api/v1/collections/{id}/documents` | Upsert a document (`metadata`, `vectors`, optional `externalKey` and `id`) |
 | `POST /api/v1/collections/{id}/documents/batch` | Upsert many at once |
 | `GET /api/v1/collections/{id}/documents` | List documents |
 | `POST /api/v1/collections/{id}/hybrid-search` | BM25 and vector fused |
@@ -153,6 +163,10 @@ The remaining data-plane endpoints follow the same pattern - data port, bearer t
 Graphs mirror this under `/api/v1/graphs/{id}/...` with nodes, edges, traversal, context windows and the
 Graph RAG operations.
 
+Omitting `id` on an upsert has the store assign one, which is what you want for a new document; the
+assigned id comes back in the response. Giving an `id` replaces that document - including `id: 0`, which is
+a real document rather than a "no id" marker, so leave the field out rather than sending a zero.
+
 **Take the exact request bodies from the Swagger UI** at <http://localhost:8082/swagger-ui>, or from the
 OpenAPI document it is generated from:
 
@@ -161,23 +175,47 @@ curl -sS http://localhost:8082/api-docs > openapi.json
 ```
 
 That is generated from the running server, so it cannot drift the way a hand-copied example in a manual
-can. It is worth knowing that a malformed body returns a bare `400` without saying which field was at
-fault, so composing these against the live schema saves real time. For anything beyond a quick curl, the
-[Java SDK](java-sdk.md) is less work - it takes typed builders instead of JSON.
+can. When a body is rejected the response usually names the field - see [Errors](#errors) below. For
+anything beyond a quick curl, the [Java SDK](java-sdk.md) is less work - it takes typed builders
+instead of JSON.
 
 ## Errors
 
-Standard HTTP status codes, with a JSON body describing the problem.
+Standard HTTP status codes, with an [RFC 7807](https://www.rfc-editor.org/rfc/rfc7807) problem
+document as the body:
 
 | Status | Means |
 |---|---|
-| `400` | The request is malformed - a bad filter, a vector of the wrong length. |
-| `401` | Missing, invalid or expired token. Exchange again. |
+| `400` | The request is malformed - a bad filter, a vector of the wrong length, a field that does not bind. |
+| `401` | Missing or invalid credential. On the data port, usually an expired token. |
 | `403` | Authenticated, but this role may not do this. |
 | `404` | No such collection, graph or document. |
 | `409` | A conflict, such as a uniqueness violation. |
 
-A `401` on a call that worked a few minutes ago is almost always the 300-second expiry.
+When a `400` comes from a field that would not bind, `detail` names the property at fault, so you rarely
+need to bisect a payload:
+
+```json
+{
+  "title": "Bad Request",
+  "status": 400,
+  "detail": "vectorFields[0].dimension: Cannot deserialize value of type `java.lang.Integer` from String \"lots\": not a valid `java.lang.Integer` value",
+  "instance": "/api/v1/projects/.../collections"
+}
+```
+
+Rejected enum values list what is accepted, which is quicker than looking them up:
+
+```
+similarityFunction: ... not one of the values accepted for Enum class: [COSINE, EUCLIDEAN, DOT_PRODUCT]
+```
+
+Not every `400` can be attributed to a single field. A request the server parsed but rejected on its
+merits carries the reason without a property - `At least one vector field is required` - and a body that
+is not valid JSON at all reports the parse position instead, since there is no field to point at.
+
+A `401` on a call that worked a few minutes ago is almost always the 300-second token expiry. Server-side
+failures return a `500` without a `detail` - if you hit one, the container log has the reason.
 
 ## Health and metrics
 

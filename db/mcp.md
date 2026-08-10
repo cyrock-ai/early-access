@@ -44,8 +44,13 @@ Authorization: Bearer <api-key>
 
 The key is authenticated per request rather than configured once on the server. That is what allows
 one endpoint to serve several users and agents at different permission levels: an agent can only do
-what its key's role allows, exactly as in the console. There is no ambient identity to fall back on,
-so a request without a credential fails rather than being treated as trusted.
+what its key's role allows, exactly as in the console.
+
+This image deliberately configures **no** fallback identity, so a request that arrives without a
+credential fails rather than being treated as trusted. That is a property of how the image is
+configured rather than of the protocol - the MCP server does support a default key, and setting one
+would make the endpoint usable by anything that can reach the port. Worth knowing if you later run it
+yourself.
 
 Tools also default to the project from the startup banner, so an agent need not be told a project ID
 for ordinary work.

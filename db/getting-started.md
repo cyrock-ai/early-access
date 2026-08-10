@@ -5,9 +5,11 @@ waiting for the first start.
 
 ## What you need
 
-- **Docker**, any recent version. Nothing else - no JDK, no database, no search cluster.
+- **Docker**, any recent version. No JDK, no database, no search cluster.
 - **4 GB of memory** available to the container. 6 GB is more comfortable if you intend to load a
   larger dataset.
+- `curl` and [`jq`](https://jqlang.github.io/jq/) for the REST steps further down. Only those steps
+  need them - the console, and everything you can reach from it, needs nothing but Docker.
 - Ports `8080`, `8081`, `8082`, `8085` and `9090` free on your machine. If some are taken, see
   [Troubleshooting](troubleshooting.md).
 
@@ -16,14 +18,17 @@ The image is multi-architecture, so Apple Silicon and ARM servers run natively w
 ## 1. Start it
 
 ```bash
-docker run --rm \
+docker run --rm --name cyrock-db \
   -p 8080:8080 -p 8081:8081 -p 8082:8082 -p 8085:8085 -p 9090:9090 \
   -v cyrock-db-data:/data \
   -e JAVA_OPTS=-Xmx3g \
   cyrockai/db:0.9.0
 ```
 
-The named volume is what makes your data survive a restart. Leave `-v` off for a throwaway run.
+Two flags worth keeping. The named volume is what makes your data survive a restart - leave `-v` off
+for a throwaway run. And `--name cyrock-db` is what lets every later `docker logs cyrock-db` or
+`docker exec cyrock-db ...` in this manual find your container; without it Docker assigns a random
+name and those commands have nothing to match.
 
 First start takes **30 to 60 seconds** while the engine creates its storage and seeds a tenant. You
 can watch for readiness rather than guess:
@@ -62,7 +67,7 @@ are also written to `bootstrap-state.properties` in the storage directory, so yo
 later without restarting:
 
 ```bash
-docker exec <container> cat /data/bootstrap-state.properties
+docker exec cyrock-db cat /data/bootstrap-state.properties
 ```
 
 The three logins are seeded at different role levels so you can see what each role can do. They are

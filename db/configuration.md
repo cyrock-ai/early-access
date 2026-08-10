@@ -14,7 +14,7 @@ Three servers and the vector indices share one JVM in this image, so the heap ma
 would for a single service:
 
 ```bash
-docker run --rm -p 8080:8080 -v cyrock-db-data:/data \
+docker run --rm --name cyrock-db -p 8080:8080 -v cyrock-db-data:/data \
   -e JAVA_OPTS="-Xmx6g" \
   cyrockai/db:0.9.0
 ```
@@ -35,7 +35,7 @@ This is the one to start with. It runs the embedding model inside the container,
 works with no API key, no provider account and no outbound network access at all:
 
 ```bash
-docker run --rm -p 8080:8080 -v cyrock-db-data:/data \
+docker run --rm --name cyrock-db -p 8080:8080 -v cyrock-db-data:/data \
   -e CYROCK_DB_EMBEDDING_ONNX_ENABLED=true \
   cyrockai/db:0.9.0
 ```
@@ -102,7 +102,7 @@ query cannot be used to read arbitrary files from the host.
 | `CYROCK_DB_DATA_IMPORT_BATCH_SIZE` | `5000` | Rows committed per transaction during an import. |
 
 ```bash
-docker run --rm -p 8080:8080 \
+docker run --rm --name cyrock-db -p 8080:8080 \
   -v cyrock-db-data:/data \
   -v "$PWD/imports:/imports:ro" \
   -e CYROCK_DB_DATA_IMPORT_PATH=/imports \

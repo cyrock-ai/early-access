@@ -68,13 +68,13 @@ building.
 
 ### Support expectations
 
-Early Access is pre-release software, supported on a best-effort basis through the channel you were
-given with your invitation. We read everything.
+Early Access is pre-release software, supported on a best-effort basis through
+[issues](https://github.com/cyrock-ai/early-access/issues) and
+[discussions](https://github.com/cyrock-ai/early-access/discussions) in the Early Access repository.
+We read everything.
 
-Most useful to us, roughly in order: something that does not work, something that was confusing,
-something missing that blocks a real use case, and performance that surprised you. Do please talk to us
-about performance privately - the licence asks you not to publish benchmarks or comparisons without
-our written consent, and we would rather have the conversation than have you guess.
+Most useful to us, roughly in order: something that does not work, something that was confusing, and
+something missing that blocks a real use case.
 
 Storage carries over between Early Access releases. Take a backup before upgrading anyway; see
 [Operations](operations.md).

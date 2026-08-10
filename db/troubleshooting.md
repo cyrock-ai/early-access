@@ -63,7 +63,7 @@ docker logs cyrock-db | grep -i "OutOfMemory"
 Raise the heap, and Docker's own limit with it:
 
 ```bash
-docker run --rm --memory=8g -e JAVA_OPTS="-Xmx6g" ... cyrockai/db:0.9.0
+docker run --rm --name cyrock-db --memory=8g -e JAVA_OPTS="-Xmx6g" ... cyrockai/db:0.9.0
 ```
 
 `-Xmx` above what Docker will grant does not help - the container gets killed instead of the JVM
@@ -83,7 +83,7 @@ netstat -ano | findstr :8080
 Either free it, or publish to a different host port - the left-hand number is yours to choose:
 
 ```bash
-docker run --rm -p 18080:8080 -p 18085:8085 ... cyrockai/db:0.9.0
+docker run --rm --name cyrock-db -p 18080:8080 -p 18085:8085 ... cyrockai/db:0.9.0
 ```
 
 The console is then on `http://localhost:18080`, and the MCP endpoint on `http://localhost:18085/mcp`.
@@ -153,7 +153,9 @@ every time - and `docker run --rm` removes it on exit. Add the volume.
 
 ## Still stuck
 
-Collect the log and send it through your Early Access support channel:
+Open an [issue](https://github.com/cyrock-ai/early-access/issues) if something is broken, or a
+[discussion](https://github.com/cyrock-ai/early-access/discussions) if you are not sure it is. Collect
+the log first:
 
 ```bash
 docker logs cyrock-db > cyrock-db.log 2>&1
@@ -161,3 +163,6 @@ docker logs cyrock-db > cyrock-db.log 2>&1
 
 Please include what you ran, what you expected and what happened. The log's first forty lines carry
 the version and configuration, which is usually where the answer is.
+
+Both channels are public, so read the log before attaching it - it contains your API key, and any
+project or collection names you have created.
