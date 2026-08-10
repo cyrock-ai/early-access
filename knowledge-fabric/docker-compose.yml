@@ -1,0 +1,61 @@
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: aiknowledgefabric-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: AIKnowledgeFabric
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-admin}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d AIKnowledgeFabric"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal
+
+  app:
+    image: cyrockai/knowledge-fabric-frontend:0
+    pull_policy: always
+    container_name: aiknowledgefabric-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/AIKnowledgeFabric
+      DB_USERNAME: admin
+      DB_PASSWORD: ${DB_PASSWORD:-admin}
+      COMPOSE_DIR: /app/compose-files
+      RAG_SERVICE_IMAGE: ${RAG_SERVICE_IMAGE:-cyrockai/knowledge-fabric-topic}
+      RAG_SERVICE_IMAGE_VERSION: ${RAG_SERVICE_IMAGE_VERSION:-0}
+      RAG_SERVICE_PULL_POLICY: ${RAG_SERVICE_PULL_POLICY:-Always}
+      AGENT_SERVER_IMAGE: ${AGENT_SERVER_IMAGE:-cyrockai/knowledge-fabric-agent}
+      AGENT_SERVER_IMAGE_VERSION: ${AGENT_SERVER_IMAGE_VERSION:-0}
+      AGENT_SERVER_PULL_POLICY: ${AGENT_SERVER_PULL_POLICY:-Always}
+      VECTOR_DB_IMAGE: ${VECTOR_DB_IMAGE:-pgvector/pgvector:pg16}
+      # Allows the app to reach per-topic RAG containers via host-exposed ports
+      RAG_SERVICE_HOST: host.docker.internal
+      # Allows the app to reach Docling server containers via host-exposed ports
+      DOCLING_SERVICE_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - compose-files:/app/compose-files
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+
+volumes:
+  postgres-data:
+  compose-files:
+
+networks:
+  internal:
+    driver: bridge
