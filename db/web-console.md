@@ -49,8 +49,9 @@ Two things worth knowing:
 
 - **Use parameters.** The view has a parameter panel. It avoids quoting problems and is a better habit
   than editing values into the query text.
-- **`score()` is a column.** Return it whenever you use vector search - seeing the actual similarity
-  tells you whether a result set is genuinely good or merely the best of a bad batch.
+- **`score(...)` is a column.** Return it whenever you use `SEARCH` or `SIMILAR TO` - the ranking
+  score tells you whether a result set is genuinely good or merely the best of a bad batch. It takes
+  the variable it scores, so `score(d)` for a document and `score(m)` for a node.
 
 Query history is kept, so an afternoon of exploration is recoverable.
 

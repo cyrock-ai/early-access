@@ -25,7 +25,13 @@ port or to write to `/data` reports itself there.
 The key is printed in the startup banner. Recover it without restarting:
 
 ```bash
+# macOS / Linux
 docker logs cyrock-db | head -40
+```
+
+```powershell
+# Windows
+docker logs cyrock-db | Select-Object -First 40
 ```
 
 Or read it from the storage directory, where it is cached:
@@ -57,8 +63,17 @@ Symptoms: the container exits unexpectedly, or queries get progressively slower 
 in the log:
 
 ```bash
-docker logs cyrock-db | grep -i "OutOfMemory"
+# macOS / Linux
+docker logs cyrock-db 2>&1 | grep -i "OutOfMemory"
 ```
+
+```powershell
+# Windows
+docker logs cyrock-db 2>&1 | Select-String "OutOfMemory"
+```
+
+The `2>&1` matters here: the JVM reports an `OutOfMemoryError` on stderr, not stdout, so a filter
+without it finds nothing and the problem looks like something else.
 
 Raise the heap, and Docker's own limit with it:
 
@@ -76,6 +91,9 @@ reporting a clean error. See the sizing table in [Operations](operations.md).
 ```bash
 # macOS / Linux
 lsof -i :8080
+```
+
+```powershell
 # Windows
 netstat -ano | findstr :8080
 ```

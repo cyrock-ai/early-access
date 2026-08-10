@@ -1,6 +1,6 @@
 # Getting started
 
-From nothing to a working vector search and a graph query. Budget about ten minutes, most of it
+From nothing to a running engine, a search and a graph query. Budget about ten minutes, most of it
 waiting for the first start.
 
 ## What you need
@@ -84,36 +84,50 @@ is where you work with data.
 
 Rather than starting empty:
 
-1. Go to **Graphs** in the workbench and press **Try Samples**.
-2. Both sample graphs are pre-selected. Press **Create Selected**.
+1. Go to **Graphs** in the workbench and press **Try Samples**. Both sample graphs are pre-selected;
+   press **Create Selected**.
+2. Do the same in **Collections** - the next step uses one of those.
 
-You get two graphs - a movies graph and a retail graph - with nodes, typed edges and vector
-embeddings already computed. The **Collections** list has its own **Try Samples** button with three
-document sets, including an FAQ knowledge base.
+The graphs are a movies graph and a retail graph, with nodes, typed edges and vector embeddings
+already computed. The collections are three document sets, including an FAQ knowledge base and a
+movies collection.
 
 Loading takes a few seconds per dataset; progress is shown per template.
 
-## 5. Your first vector search
+## 5. Your first search
 
-Open the **movies** graph and switch to the query view. Vector search in CyQL reads as a clause on a
+Open the **movies** collection and switch to the query view. Search in CyQL reads as a clause on a
 normal match:
 
 ```cypher
-MATCH (m:Movie)
-SIMILAR TO $query ON embedding TOP 5
-RETURN m.title, m.tagline, score()
+MATCH (d)
+SEARCH 'godfather' ON title TOP 5
+RETURN d.title, score(d)
 ```
 
-`$query` is the text you are searching for; the engine embeds it and ranks by similarity.
-`score()` returns the similarity so you can see how confident each match is.
+Two of the sample films match. `SEARCH` is BM25 keyword scoring, so it needs no embedding provider -
+only a field indexed for full text, which `title` is in this collection. `score(d)` gives the score,
+and it takes the variable it scores: a bare `score()` will not parse.
 
-Try "a heist that goes wrong" and then "love across time". The results are ranked by meaning, not by
-keyword overlap - nothing in the first query needs to contain the word "heist".
+Documents have no labels, which is why the pattern is `(d)` rather than `(d:Something)`.
+
+Vector search is the sibling clause:
+
+```cypher
+MATCH (d)
+SIMILAR TO $qv ON vector TOP 5
+RETURN d.title, score(d)
+```
+
+Worth knowing before you try it: `$qv` is a **vector**, not text. `SIMILAR TO` ranks against an
+embedding you supply with the query and does not embed anything for you, so by hand it means producing
+a 384-number array first. The console and the [Java SDK](java-sdk.md) are the comfortable ways in.
+Start with `SEARCH` here and come back to `SIMILAR TO` from the SDK chapter.
 
 ## 6. Your first graph query
 
-Vector search finds a starting point; the graph tells you what surrounds it. Traversal uses arrow
-patterns:
+Now open the **movies** graph. Search finds a record; a graph tells you what surrounds it. Traversal
+uses arrow patterns:
 
 ```cypher
 MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
@@ -121,16 +135,18 @@ WHERE m.title = 'The Matrix'
 RETURN p.name
 ```
 
-The two combine, which is the point of the engine - find semantically, then expand structurally:
+Reading the same edge from the other end works with the undirected form, which follows it either way:
 
 ```cypher
-MATCH (m:Movie)
-SIMILAR TO $query ON embedding TOP 3
-MATCH (m)<-[:ACTED_IN]-(p:Person)
-RETURN m.title, p.name, score()
+MATCH (m:Movie)-[:ACTED_IN]-(p:Person)
+WHERE m.title = 'The Matrix'
+RETURN m.title, p.name
 ```
 
-[CyQL](cyql.md) covers the language properly.
+Search and traversal also combine in a single `MATCH`, which is the point of the engine - find records,
+then expand through what they are connected to. That needs a searchable field on the graph, and the
+sample graph has none, so [CyQL](cyql.md) is where to pick that up along with the rest of the
+language.
 
 ## 7. Your first REST call
 

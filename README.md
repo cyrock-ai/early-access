@@ -13,55 +13,9 @@ Questions and feedback belong in this repository:
 [discussions](https://github.com/cyrock-ai/early-access/discussions) for everything else. Both are
 public, so please keep anything confidential to your organization out of them.
 
-## Products
-
-[<img src="vectralink/etc/vectralink-logo-with-text.svg" alt="Vectralink" width="500" />](vectralink/README.md)
+---
 
 [<img src="db/etc/cyrock-ai-db-logo.svg" alt="CYROCK.AI DB" width="500" />](db/README.md)
-
----
-
-## Vectralink
-
-**Vector Database Synchronization.** A modular Java framework that keeps your vector embeddings in
-sync with your source-of-truth data through change data capture, and lets you query by semantic
-similarity - across Qdrant, Pinecone, pgvector, Weaviate and Milvus.
-
-Full documentation: **[vectralink/README.md](vectralink/README.md)**
-
-### Installation
-
-Vectralink is distributed as Maven artifacts. First, add your GitHub credentials to your
-`settings.xml`. More info can be found in the official
-[GitHub documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#installing-a-package).
-
-```xml
-<servers>
-    <server>
-        <id>cyrock-early-access</id>
-        <username>your-github-username</username>
-        <password>your-personal-access-token</password>
-    </server>
-</servers>
-```
-
-Add the following repository.
-
-```xml
-<repositories>
-    <repository>
-        <id>cyrock-early-access</id>
-        <name>GitHub CYROCK Early Access Packages</name>
-        <url>https://maven.pkg.github.com/cyrock-ai/early-access</url>
-    </repository>
-</repositories>
-```
-
-Now you can use the
-[CYROCK packages](https://github.com/orgs/cyrock-ai/packages?repo_name=early-access). See also the
-starter [pom.xml](./pom.xml) in this repository.
-
----
 
 ## CYROCK.AI DB
 
@@ -94,12 +48,40 @@ directly, and the data port wants a short-lived token you exchange it for - [RES
 covers that, and it is the first thing worth reading there.
 
 [Getting started](db/getting-started.md) walks through loading a sample dataset and running your first
-vector search and graph query.
+search and graph query.
 
 ### Java SDK
 
-Optional - the console, the REST APIs and the MCP endpoint need nothing installed. The SDK uses the
-same `cyrock-early-access` server and repository shown above:
+Optional - the console, the REST APIs and the MCP endpoint need nothing installed.
+
+The SDK is distributed as a Maven artifact from this repository's GitHub Packages registry. Add your
+GitHub credentials to your `settings.xml` first. More info can be found in the official
+[GitHub documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#installing-a-package).
+
+```xml
+<servers>
+    <server>
+        <id>cyrock-early-access</id>
+        <username>your-github-username</username>
+        <password>your-personal-access-token</password>
+    </server>
+</servers>
+```
+
+Add the following repository. The `id` must match the `<server>` above - that is how Maven knows which
+credentials to send.
+
+```xml
+<repositories>
+    <repository>
+        <id>cyrock-early-access</id>
+        <name>GitHub CYROCK Early Access Packages</name>
+        <url>https://maven.pkg.github.com/cyrock-ai/early-access</url>
+    </repository>
+</repositories>
+```
+
+Then the dependency:
 
 ```xml
 <dependency>
@@ -109,7 +91,9 @@ same `cyrock-early-access` server and repository shown above:
 </dependency>
 ```
 
-See [db/java-sdk.md](db/java-sdk.md) for connecting and a complete worked example.
+See [db/java-sdk.md](db/java-sdk.md) for connecting and a complete worked example, the
+[published packages](https://github.com/orgs/cyrock-ai/packages?repo_name=early-access), and the
+starter [pom.xml](./pom.xml) in this repository.
 
 ### AI agents
 

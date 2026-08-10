@@ -31,24 +31,29 @@ RETURN d.title, d.body
 
 ```cypher
 MATCH (m:Movie)
-SIMILAR TO $query ON embedding TOP 5
-RETURN m.title, score()
+SIMILAR TO $qv ON embedding TOP 5
+RETURN m.title, score(m)
 ```
 
-- `$query` is a parameter - text to embed, or a vector you supply directly.
+- `$qv` is a **vector** parameter - the query embedding, supplied with the statement. `SIMILAR TO`
+  does not accept text and does not embed anything for you; compute the vector with the same model
+  the field was written with. [Java SDK](java-sdk.md) shows a request carrying one.
 - `ON embedding` names the vector field, so a record with several vector fields can be searched on
   each independently.
-- `TOP 5` is how many nearest neighbours to consider.
-- `score()` returns the similarity, which you can also sort on or filter with.
+- `TOP 5` is how many nearest neighbours to consider. It takes a literal, not a parameter.
+- `score(m)` returns the similarity. It takes the variable it scores, so it is `score(m)` here and
+  `score(d)` in a collection query - a bare `score()` will not parse.
 
-Filters apply **before** ranking, so a narrow filter still returns a full result set:
+`WHERE` comes after the clauses that belong to the `MATCH` - the similarity, the full-text search and
+the edge pattern - and filters apply **before** ranking, so a narrow filter still returns a full
+result set:
 
 ```cypher
 MATCH (m:Movie)
+SIMILAR TO $qv ON embedding TOP 10
 WHERE m.released > 2000 AND m.genre = 'thriller'
-SIMILAR TO $query ON embedding TOP 10
-RETURN m.title, m.released, score()
-ORDER BY score() DESC
+RETURN m.title, m.released, score(m)
+ORDER BY score(m) DESC
 ```
 
 ## Full-text search
@@ -59,7 +64,7 @@ exact term - a product code, a name, an error string:
 ```cypher
 MATCH (d)
 SEARCH 'connection timeout' ON body TOP 10
-RETURN d.title, score()
+RETURN d.title, score(d)
 ```
 
 Running both and combining them is hybrid retrieval, and it is usually better than either alone.
@@ -87,7 +92,7 @@ Variable-length traversal follows a chain to a bounded depth:
 ```cypher
 MATCH (p:Person)-[:KNOWS*1..3]->(other:Person)
 WHERE p.name = 'Alice'
-RETURN DISTINCT other.name
+RETURN other.name
 ```
 
 Always bound the depth. An unbounded traversal on a well-connected graph will visit most of it.
@@ -99,9 +104,8 @@ to gather context.
 
 ```cypher
 MATCH (m:Movie)
-SIMILAR TO $query ON embedding TOP 3
-MATCH (m)<-[:ACTED_IN]-(p:Person)
-RETURN m.title, collect(p.name) AS cast, score()
+SIMILAR TO $qv ON embedding TOP 3 -[:ACTED_IN]-(p:Person)
+RETURN m.title, p.name, score(m)
 ```
 
 Retrieval that includes a record's neighbourhood gives a language model considerably more to work
@@ -142,13 +146,17 @@ MATCH (m:Movie) WHERE m.released < 1950
 DELETE m
 ```
 
-Edges are created between matched nodes:
+An edge is written as part of a pattern, so one statement creates both ends and the edge between
+them:
 
 ```cypher
-MATCH (p:Person), (m:Movie)
-WHERE p.name = 'Denis Villeneuve' AND m.title = 'Arrival'
-CREATE (p)-[:DIRECTED]->(m)
+CREATE (p:Person {name: 'Denis Villeneuve'})-[:DIRECTED]->(m:Movie {title: 'Arrival'})
 ```
+
+A query has a single `MATCH`, and its pattern starts from one node and may extend through one edge to
+another - `(a)-[:R]->(b)`, which is how the traversal examples above reach a second node. What it
+cannot do is bind two unconnected patterns, so matching two existing nodes and joining them is not
+expressible; use the edge endpoint on the REST API or `addEdge` in the SDK for that.
 
 ## Loading CSV
 
@@ -157,7 +165,7 @@ CREATE (p)-[:DIRECTED]->(m)
 ```cypher
 LOAD CSV WITH HEADERS FROM 'movies.csv' AS row
 MERGE (m:Movie {title: row.title})
-SET m.released = toInteger(row.released)
+ON CREATE SET m.released = toInteger(row.released)
 ```
 
 Each row runs the statement that follows. `WITH HEADERS` uses the first line for column names, so
@@ -172,12 +180,26 @@ arbitrary files from the host. See [Configuration](configuration.md) for the dir
 Collections and graphs can be created and changed in CyQL:
 
 ```cypher
-CREATE COLLECTION articles
+CREATE COLLECTION articles (
+  VECTOR vector DIMENSION 384 SIMILARITY COSINE,
+  METADATA title STRING CARDINALITY HIGH,
+  METADATA body STRING CARDINALITY HIGH FULLTEXT
+)
+
 SHOW COLLECTIONS
+
 DESCRIBE COLLECTION articles
 ```
 
+Those are three separate statements; send them one at a time. A collection needs at least one
+vector field, and `CARDINALITY` picks the index: `HIGH` for values that are nearly unique per
+record, `LOW` for a small repeated set. `FULLTEXT` is what makes a field usable with `SEARCH`.
+
 `ALTER COLLECTION` adds fields and indexes to something that already holds data.
+
+Schema statements are project-scoped, so they go to the project statements endpoint on the platform
+port rather than to a collection on the data port - see [REST API](rest-api.md) for which port takes
+which credential.
 
 ## Parameters
 
@@ -186,12 +208,13 @@ problems, and it lets the engine reuse a query plan:
 
 ```cypher
 MATCH (m:Movie)
+SIMILAR TO $qv ON embedding TOP 10
 WHERE m.released > $since
-SIMILAR TO $query ON embedding TOP $k
-RETURN m.title, score()
+RETURN m.title, score(m)
 ```
 
-Every interface accepts a parameter map alongside the statement.
+Every interface accepts a parameter map alongside the statement, and vector parameters are passed
+separately from scalar ones. `TOP` is the exception: it takes a literal.
 
 ## Read-only against read-write
 

@@ -105,7 +105,13 @@ The startup banner is at the top of the log, which is where to look for the API 
 you have lost them:
 
 ```bash
+# macOS / Linux
 docker logs cyrock-db | head -40
+```
+
+```powershell
+# Windows
+docker logs cyrock-db | Select-Object -First 40
 ```
 
 ## Resource sizing
@@ -166,7 +172,13 @@ shutdown in the log. Passing `-t 60` lets it finish properly and exit `143`.
 Confirm a clean shutdown in the log:
 
 ```bash
+# macOS / Linux
 docker logs cyrock-db 2>&1 | grep "Storage system stopped"
+```
+
+```powershell
+# Windows
+docker logs cyrock-db 2>&1 | Select-String "Storage system stopped"
 ```
 
 One thing to avoid: stopping while the container is still starting. The health status turns `healthy`

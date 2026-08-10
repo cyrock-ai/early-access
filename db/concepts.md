@@ -39,9 +39,9 @@ after the fact would throw away most of your top-k and leave you with too few re
 
 ```cypher
 MATCH (m:Movie)
+SIMILAR TO $qv ON embedding TOP 10
 WHERE m.released > 2000 AND m.genre = 'thriller'
-SIMILAR TO $query ON embedding TOP 10
-RETURN m.title, score()
+RETURN m.title, score(m)
 ```
 
 The filter narrows the candidate set; the vector search ranks what survives.
