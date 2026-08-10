@@ -1,12 +1,18 @@
-# Early Access to CYROCK libraries
+<p align="center">
+  <img src="db/etc/cyrock-ai-db-logo.svg" alt="CYROCK.AI" width="500" />
+</p>
+
+<h1 align="center">Early Access Products</h1>
+
+<p align="center">
+  Pre-release CYROCK.AI products, their manuals, and the packages they ship.
+</p>
+
+---
 
 Welcome to the CYROCK.AI Early Access programme. This repository is where Early Access products are
 distributed: their documentation lives here, and where a product ships a Java artifact, it is
 published to this repository's GitHub Packages registry.
-
-Two products are in the programme today — **CYROCK.AI DB**, the unified AI data engine, and
-**AI Knowledge Fabric**, the platform for building RAG chatbots, agents and pipelines on top of it.
-Both run from a container image, so neither needs building.
 
 Everything here is pre-release software licensed for evaluation and internal, non-production use.
 Please read the [licence](./LICENSE) before you start - it is short, and the term easiest to trip over
@@ -19,7 +25,17 @@ public, so please keep anything confidential to your organization out of them.
 
 ---
 
-[<img src="db/etc/cyrock-ai-db-logo.svg" alt="CYROCK.AI DB" width="500" />](db/README.md)
+## Products
+
+Two products are in the programme today. Both run from a container image, so neither needs building —
+each section below opens with a quick start you can paste into a terminal.
+
+| Product | What it is | Manual |
+|---|---|---|
+| **[CYROCK.AI DB](#cyrockai-db)** | The Unified AI Data Engine — vector search, knowledge graphs, agentic memory and hybrid retrieval in a single engine, with storage built in | [db/README.md](db/README.md) |
+| **[AI Knowledge Fabric](#ai-knowledge-fabric)** | RAG chatbots, agents and visual pipelines, configured through a web interface that provisions the container stacks underneath | [knowledge-fabric/README.md](knowledge-fabric/README.md) |
+
+---
 
 ## CYROCK.AI DB
 
@@ -105,8 +121,6 @@ The image exposes 39 tools over the Model Context Protocol at `http://localhost:
 and other MCP clients can search, query and write directly. See [db/mcp.md](db/mcp.md).
 
 ---
-
-[<img src="knowledge-fabric/assets/cyrock-ai-mark-azure.svg" alt="AI Knowledge Fabric" width="104" height="116" />](knowledge-fabric/README.md)
 
 ## AI Knowledge Fabric
 
