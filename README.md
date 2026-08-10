@@ -77,16 +77,21 @@ CYROCK.AI DB ships as one container image, so there is nothing to build. It is p
 mirrored to the GitHub Container Registry, and native on both `linux/amd64` and `linux/arm64`.
 
 ```bash
-docker run --rm \
+docker run --rm --name cyrock-db \
   -p 8080:8080 -p 8081:8081 -p 8082:8082 -p 8085:8085 -p 9090:9090 \
   -v cyrock-db-data:/data \
   -e JAVA_OPTS=-Xmx3g \
-  cyrockai/db:latest
+  cyrockai/db:0.9.0
 ```
 
+Pin the version rather than tracking `latest`, so an upgrade is something you choose. The `--name` is
+what lets `docker logs cyrock-db` and the other commands in the manual find your container.
+
 First start takes 30-60 seconds. Then open <http://localhost:8080> and sign in as
-`superadmin` / `superadmin`. The container prints an API key and a project ID on startup - those are
-what the REST APIs, the Java SDK and the MCP endpoint need.
+`superadmin` / `superadmin`. The container prints an API key and a project ID on startup, which is what
+the Java SDK and the MCP endpoint authenticate with. Over REST the API key goes to the platform port
+directly, and the data port wants a short-lived token you exchange it for - [REST API](db/rest-api.md)
+covers that, and it is the first thing worth reading there.
 
 [Getting started](db/getting-started.md) walks through loading a sample dataset and running your first
 vector search and graph query.
