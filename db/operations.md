@@ -134,15 +134,16 @@ about 1.5 KB before indexing.
 
 ## Upgrading
 
-Early Access releases are tagged. Pull the new tag and restart against the same volume:
+Early Access releases are tagged. Substitute the tag you are moving to for `<new-version>` below, then
+pull it and restart against the same volume:
 
 ```bash
 docker stop cyrock-db && docker rm cyrock-db
-docker pull cyrockai/db:0.9.1
+docker pull cyrockai/db:<new-version>
 docker run -d --name cyrock-db \
   -p 8080:8080 -p 8081:8081 -p 8082:8082 -p 8085:8085 -p 9090:9090 \
   -v cyrock-db-data:/data -e JAVA_OPTS=-Xmx6g \
-  cyrockai/db:0.9.1
+  cyrockai/db:<new-version>
 ```
 
 Take a backup first. Storage carries over between Early Access releases, but this is pre-release

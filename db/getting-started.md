@@ -62,6 +62,12 @@ When it is ready, the container prints a banner. It holds the three things you n
 ==========================================================
 ```
 
+The banner is printed from inside the container, so it lists every port the engine bound - not the ones
+you can reach. The addresses that work from your machine are those you published with `-p`, which is why
+`http://localhost:8080` works while `localhost:9091` and `localhost:9092` do not: the `docker run` above
+publishes neither. That is deliberate. The client gateway on `9090` fronts both planes and is the only
+gRPC port the SDK needs, so the other two stay internal.
+
 Keep the **API key** and the **project ID** to hand - every programmatic interface needs them. Both
 are also written to `bootstrap-state.properties` in the storage directory, so you can recover them
 later without restarting:
