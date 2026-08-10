@@ -31,18 +31,23 @@ engine compute them on write.
 
 ### In-process ONNX - no account, no network
 
-This is the one to start with. It runs the embedding model inside the container, so vector search
-works with no API key, no provider account and no outbound network access at all:
+**The image enables this one by default**, so vector search works out of the box: the embedding model
+runs inside the container, needing no API key, no provider account and no outbound network access at
+all. There is nothing to set to get it.
+
+**It takes precedence over every other embedding provider.** That is what makes the default safe - but
+it also means configuring a provider of your own is not enough on its own. To be served by another
+provider, turn ONNX off in the same command:
 
 ```bash
 docker run --rm --name cyrock-db -p 8080:8080 -v cyrock-db-data:/data \
-  -e CYROCK_DB_EMBEDDING_ONNX_ENABLED=true \
+  -e CYROCK_DB_EMBEDDING_ONNX_ENABLED=false \
+  -e CYROCK_DB_EMBEDDING_OPENAI_API_KEY=sk-... \
   cyrockai/db:0.9.0
 ```
 
-**It takes precedence over every other embedding provider.** If you enable ONNX and also set an
-Ollama URL or an OpenAI key, ONNX wins and the others are ignored - worth knowing before you spend an
-afternoon wondering which one produced a vector.
+Leave ONNX on and set an OpenAI key, and ONNX still wins while the key is ignored - worth knowing
+before you spend an afternoon wondering which one produced a vector.
 
 ### Hosted and self-hosted providers
 
@@ -144,9 +149,9 @@ docker run -d --name cyrock-db \
   -v cyrock-db-data:/data \
   -v "$PWD/imports:/imports:ro" \
   -e JAVA_OPTS="-Xmx6g" \
-  -e CYROCK_DB_EMBEDDING_ONNX_ENABLED=true \
   -e CYROCK_DB_DATA_IMPORT_PATH=/imports \
   cyrockai/db:0.9.0
 ```
 
-That needs no external service and no provider account.
+That needs no external service and no provider account - embeddings are in-process by default, so there
+is no provider line to add.

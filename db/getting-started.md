@@ -191,6 +191,6 @@ surface - <http://localhost:8081/swagger-ui> for platform operations and
   reach for which.
 - **Use it from Java** - [Java SDK](java-sdk.md). The connection needs no port argument.
 - **Connect an agent** - [MCP](mcp.md) wires Claude to the engine's 39 tools.
-- **Turn on embeddings without a provider account** - [Configuration](configuration.md) covers the
-  in-process ONNX embedder, which needs no API key and no network.
+- **Use your own embedding provider** - [Configuration](configuration.md). Embeddings are in-process by
+  default and need no account, so this is only worth reading when you want a specific model.
 - **Keep it running** - [Operations](operations.md) covers volumes, backup, health and sizing.

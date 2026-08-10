@@ -146,13 +146,13 @@ configuration - most often a missing `Authorization` header or the wrong URL. Th
 
 Three usual causes:
 
-- **No embedding provider and no supplied vectors.** Turn on the in-process embedder with
-  `CYROCK_DB_EMBEDDING_ONNX_ENABLED=true` - it needs no account and no network. See
-  [Configuration](configuration.md).
+- **The embedder was turned off.** The image embeds in-process by default, so this only applies if you
+  passed `CYROCK_DB_EMBEDDING_ONNX_ENABLED=false` - then a field with no supplied vector has nothing to
+  embed it. See [Configuration](configuration.md).
 - **Dimension mismatch.** The provider's output length must equal the field's declared dimensions. The
   in-process ONNX model is 384. Changing provider usually changes dimension, which means re-embedding.
-- **Several providers configured.** ONNX takes precedence over all the others when enabled, so an
-  Ollama or OpenAI setting is silently ignored while it is on.
+- **Your own provider is being ignored.** ONNX takes precedence over the others and is on by default, so
+  an Ollama or OpenAI setting does nothing until you set `CYROCK_DB_EMBEDDING_ONNX_ENABLED=false`.
 
 ## `LOAD CSV` cannot find the file
 
