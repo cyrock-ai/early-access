@@ -1,0 +1,92 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name            = "cyrock-db"
+description     = "Python client for the CYROCK.AI DB unified AI data engine"
+readme          = "README.md"
+dynamic         = ["version"]
+requires-python = ">=3.10"
+license         = { text = "LicenseRef-Cyrock-Early-Access" }
+dependencies    = [
+    "grpcio>=1.74.0",
+    "protobuf>=6.31.1",
+    "grpcio-status>=1.74.0",
+    "typing-extensions>=4.7; python_version < '3.12'",
+]
+
+[project.urls]
+Documentation = "https://github.com/cyrock-ai/early-access"
+
+[dependency-groups]
+dev = [
+    "grpcio-tools==1.74.0",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "types-grpcio",
+]
+
+# Read from the reactor's root pom.xml by scripts/generate_proto.py, so the Python and Java
+# artifacts cannot carry different versions.
+[tool.hatch.version]
+path = "src/cyrock_db/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cyrock_db"]
+# Hatchling excludes VCS-ignored files, and _proto/ and _version.py are both generated and therefore
+# gitignored. Without this the wheel builds *successfully* and is unusable - no protobuf modules, no
+# version - which is the worst shape a packaging bug can take. Listed as artifacts so they are
+# included despite the ignore.
+artifacts = [
+    "src/cyrock_db/_proto/*_pb2.py",
+    "src/cyrock_db/_proto/*_pb2.pyi",
+    "src/cyrock_db/_proto/*_pb2_grpc.py",
+    "src/cyrock_db/_version.py",
+]
+
+[tool.ruff]
+line-length    = 120
+src            = ["src", "tests"]
+extend-exclude = ["src/cyrock_db/_proto"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version         = "3.10"
+strict                 = true
+packages               = ["cyrock_db"]
+mypy_path              = "src"
+# The generated protobuf modules are not ours to type-check. Their .pyi stubs (which protoc emits for
+# the messages) are used; errors inside the generated bodies are not ours to fix.
+#
+# Deliberately not follow_imports = "skip": that resolves the module to Any or to nothing depending on
+# how mypy was entered, so `mypy src/cyrock_db/_token.py` and `mypy` disagreed about which
+# `type: ignore` comments were needed. Analysing them makes the two agree.
+[[tool.mypy.overrides]]
+module        = "cyrock_db._proto.*"
+ignore_errors = true
+
+[tool.pytest.ini_options]
+testpaths    = ["tests"]
+# integration/ is deliberately outside testpaths: it starts a real server and needs a built reactor.
+# Run it with `pytest integration/`, or `make integration`, and CYROCK_IT=1.
+asyncio_mode = "auto"
+filterwarnings = [
+    "error",
+    # grpc.aio artifact, not ours. When a client interceptor raises - which the auth interceptor does
+    # when the token exchange fails - grpc leaves an InterceptedCall whose __del__ calls cancel(),
+    # which re-raises that exception inside __del__, where it cannot be raised. The caller still
+    # receives UnauthorizedException correctly; test_aFailedExchange_isNotCached asserts exactly that.
+    # Scoped to this one class so any other unraisable exception still fails the suite.
+    "default:.*InterceptedCall.__del__.*:pytest.PytestUnraisableExceptionWarning",
+]
+
+# Third-party modules that ship no type information. Their absence is not our defect, and
+# `ignore_missing_imports` scoped to them keeps --strict meaningful for our own code.
+[[tool.mypy.overrides]]
+module               = ["grpc_status.*", "google.rpc.*"]
+ignore_missing_imports = true

@@ -1,0 +1,17 @@
+# Generated from ../proto/src/main/proto by scripts/generate_proto.py.
+#
+# Gitignored *here* and committed into the published copy: a git install builds the sdist on the
+# user's machine, where the reactor's proto module does not exist. See the release notes in the plan
+# and scripts/generate_proto.py.
+/src/cyrock_db/_proto/*_pb2.py
+/src/cyrock_db/_proto/*_pb2.pyi
+/src/cyrock_db/_proto/*_pb2_grpc.py
+/src/cyrock_db/_version.py
+
+.venv/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+__pycache__/
