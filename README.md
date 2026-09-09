@@ -55,7 +55,7 @@ docker run --rm --name cyrock-db \
   -p 8080:8080 -p 8081:8081 -p 8082:8082 -p 8085:8085 -p 9090:9090 \
   -v cyrock-db-data:/data \
   -e JAVA_OPTS=-Xmx3g \
-  cyrockai/db:0.9.0
+  cyrockai/db:0.9.1
 ```
 
 Pin the version rather than tracking `latest`, so an upgrade is something you choose. The `--name` is
@@ -107,7 +107,7 @@ Then the dependency:
 <dependency>
     <groupId>ai.cyrock.db</groupId>
     <artifactId>cyrock-db-client-java</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1</version>
 </dependency>
 ```
 
