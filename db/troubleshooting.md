@@ -78,7 +78,7 @@ without it finds nothing and the problem looks like something else.
 Raise the heap, and Docker's own limit with it:
 
 ```bash
-docker run --rm --name cyrock-db --memory=8g -e JAVA_OPTS="-Xmx6g" ... cyrockai/db:0.9.0
+docker run --rm --name cyrock-db --memory=8g -e JAVA_OPTS="-Xmx6g" ... cyrockai/db:0.9.1
 ```
 
 `-Xmx` above what Docker will grant does not help - the container gets killed instead of the JVM
@@ -101,7 +101,7 @@ netstat -ano | findstr :8080
 Either free it, or publish to a different host port - the left-hand number is yours to choose:
 
 ```bash
-docker run --rm --name cyrock-db -p 18080:8080 -p 18085:8085 ... cyrockai/db:0.9.0
+docker run --rm --name cyrock-db -p 18080:8080 -p 18085:8085 ... cyrockai/db:0.9.1
 ```
 
 The console is then on `http://localhost:18080`, and the MCP endpoint on `http://localhost:18085/mcp`.
@@ -126,6 +126,50 @@ Check, in order:
 3. **Is the key current?** A key from a previous volume-less run is gone.
 
 A failure during the key exchange rather than at connect time usually means point 2.
+
+## Protobuf gencode/runtime mismatch on the first generated class
+
+```
+com.google.protobuf.RuntimeVersion$ProtobufRuntimeVersionException: Detected incompatible
+Protobuf Gencode/Runtime versions when loading ProjectIdRequest: gencode 4.31.1, runtime 4.29.3.
+Runtime version cannot be older than the linked gencode version.
+```
+
+Your build holds `com.google.protobuf:protobuf-java` at a version older than the one the SDK's
+classes were generated against. Protobuf accepts a runtime newer than its generated code but never
+an older one, so it refuses while the class is initializing rather than failing later on the wire.
+Nothing is wrong with the connection or the key.
+
+Read the two numbers in the message and raise `protobuf-java` to at least the `gencode` one. A
+version your build manages always wins over the one the SDK asks for, so the pin has to move where
+it actually lives. On Spring Boot 4.1 and later that is a property. Any version at or above the
+`gencode` number in your message will do; 4.35.1 below is what the SDK resolves when nothing holds
+it back, so it clears the floor with room to spare:
+
+```xml
+<properties>
+    <protobuf-java.version>4.35.1</protobuf-java.version>
+</properties>
+```
+
+Elsewhere, declare `com.google.protobuf:protobuf-java` among your own dependencies - a direct
+declaration beats one inherited through the SDK - or manage it in `dependencyManagement`. Your
+build's dependency tree will show which version you are really resolving and what is asking for the
+old one. Importing the [SDK BOM](java-sdk.md) sets a consistent version for you.
+
+A different wording, **"Same major version is required"**, means something is holding Protobuf on
+3.x. The SDK needs Protobuf 4.x; the usual culprit is an older gRPC or framework BOM imported ahead
+of everything else.
+
+**From Python** the same check exists and reads almost the same: a `VersionError` raised while
+importing `cyrock_db`, naming a `gencode` and a `runtime` version. Raise the `protobuf` package to at
+least the `gencode` number - `pip install --upgrade protobuf` - and check nothing else in the
+environment pins it lower.
+
+Do not copy the Java number across when you do: the Python SDK's floor is Protobuf **6.31.1** and the
+Java SDK's is **4.31.1**, and those are the same Protobuf release. Protobuf numbers its language
+runtimes on separate major lines, and there is no 4.31.1 on PyPI to install. See
+[Python SDK](python-sdk.md).
 
 ## MCP tools do not appear in the client
 
@@ -168,6 +212,28 @@ Absolute paths, `..` and symlinks leading out of the directory are rejected by d
 
 Almost always a missing volume. Without `-v cyrock-db-data:/data` the container is a fresh environment
 every time - and `docker run --rm` removes it on exit. Add the volume.
+
+## "Incompatible storage" at startup
+
+The log shows an `INCOMPATIBLE STORAGE` banner, the health endpoint reports storage `DOWN`, and requests
+fail with a message like *"The storage at ... was written with format version 1 ... and cannot be read by
+this build ... Start with an empty storage directory."*
+
+Your `/data` volume was written by an earlier release whose on-disk format this build cannot read. Early
+Access releases may break storage compatibility, and the engine now refuses to serve the old storage at
+startup instead of failing later with an obscure error. Start with an empty storage directory: back up the
+volume, then remove it and restart on the new version.
+
+```bash
+docker stop cyrock-db && docker rm cyrock-db
+docker volume rm cyrock-db-data
+docker run -d --name cyrock-db \
+  -p 8080:8080 -p 8081:8081 -p 8082:8082 -p 8085:8085 -p 9090:9090 \
+  -v cyrock-db-data:/data -e JAVA_OPTS=-Xmx6g \
+  cyrockai/db:<version>
+```
+
+Removing the volume deletes the data it held, so keep the backup until the new version is up and re-seeded.
 
 ## Still stuck
 

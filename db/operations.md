@@ -146,8 +146,11 @@ docker run -d --name cyrock-db \
   cyrockai/db:<new-version>
 ```
 
-Take a backup first. Storage carries over between Early Access releases, but this is pre-release
-software and a rollback is only as good as your last copy.
+Take a backup first. Storage usually carries over between Early Access releases, but a release may change
+the on-disk format when backward compatibility is not worth the cost. When that happens the engine detects
+it at startup and refuses to serve the old storage, logging a banner and reporting storage health `DOWN`
+with a message that tells you to start with an empty storage directory (back up and remove the volume, then
+restart on the new version). This is pre-release software and a rollback is only as good as your last copy.
 
 Pin an exact version rather than tracking `latest`, so an upgrade is something you choose. Note that
 `latest` will eventually cross from Early Access to general availability, which is a change of licence

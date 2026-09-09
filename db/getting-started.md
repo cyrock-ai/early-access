@@ -22,7 +22,7 @@ docker run --rm --name cyrock-db \
   -p 8080:8080 -p 8081:8081 -p 8082:8082 -p 8085:8085 -p 9090:9090 \
   -v cyrock-db-data:/data \
   -e JAVA_OPTS=-Xmx3g \
-  cyrockai/db:0.9.0
+  cyrockai/db:0.9.1
 ```
 
 Two flags worth keeping. The named volume is what makes your data survive a restart - leave `-v` off
@@ -56,7 +56,7 @@ When it is ready, the container prints a banner. It holds the three things you n
   Project ID:           3613a31d-9829-4e01-8525-c436a34eb704
   Storage:              /data
 
-  API key (REST / Java SDK / MCP):
+  API key (REST / SDKs / MCP):
     H1-q5LPq5j9_hVfpO8tIuKzIEC3Il98nPgOoh5iTJws
   Also cached in /data/bootstrap-state.properties
 ==========================================================
@@ -127,8 +127,9 @@ RETURN d.title, score(d)
 
 Worth knowing before you try it: `$qv` is a **vector**, not text. `SIMILAR TO` ranks against an
 embedding you supply with the query and does not embed anything for you, so by hand it means producing
-a 384-number array first. The console and the [Java SDK](java-sdk.md) are the comfortable ways in.
-Start with `SEARCH` here and come back to `SIMILAR TO` from the SDK chapter.
+a 384-number array first. The console and the SDKs - [Java](java-sdk.md) and
+[Python](python-sdk.md) - are the comfortable ways in. Start with `SEARCH` here and come back to
+`SIMILAR TO` from an SDK chapter.
 
 ## 6. Your first graph query
 
@@ -190,7 +191,8 @@ surface - <http://localhost:8081/swagger-ui> for platform operations and
 - **Understand the model** - [Concepts](concepts.md) explains collections against graphs, and when to
   reach for which.
 - **Use it from Java** - [Java SDK](java-sdk.md). The connection needs no port argument.
-- **Connect an agent** - [MCP](mcp.md) wires Claude to the engine's 39 tools.
+- **Use it from Python** - [Python SDK](python-sdk.md). The same operations, blocking or `async`.
+- **Connect an agent** - [MCP](mcp.md) wires Claude to the engine's 40 tools.
 - **Use your own embedding provider** - [Configuration](configuration.md). Embeddings are in-process by
   default and need no account, so this is only worth reading when you want a specific model.
 - **Keep it running** - [Operations](operations.md) covers volumes, backup, health and sizing.

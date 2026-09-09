@@ -72,7 +72,7 @@ curl -sS "http://localhost:8082/api/v1/collections/$COLLECTION_ID/documents" \
 
 Tokens are not renewed in place; you exchange again. In a long-running client, exchange when a call
 returns 401 rather than tracking the clock - it is one code path instead of two, and it handles a
-restarted server for free. The [Java SDK](java-sdk.md) does this for you.
+restarted server for free. The [Java](java-sdk.md) and [Python](python-sdk.md) SDKs do this for you.
 
 ## A short walkthrough
 
@@ -100,7 +100,12 @@ curl -sS -X POST "http://localhost:8081/api/v1/projects/$PROJECT_ID/collections"
       }'
 ```
 
-**At least one vector field is required** - a collection without one is rejected with `400`.
+**No vector field is required.** A collection without one is a document store: it stores, reads,
+lists and filters on its metadata, and answers a full-text `SEARCH` on any field declared
+`fulltext: true` - the `body` field above is one. Full-text is a property of that declaration, not of
+the vectors: with no `fulltext` field at all, a text query is refused with `No text fields configured
+for this collection`. What such a collection cannot do is similarity search, and a vector search
+against it is rejected with `400` naming the unknown field.
 
 `cardinality` picks the indexing strategy: `HIGH` for values that are nearly unique per record,
 `LOW` for a small set of repeated values like a category or status. `fulltext: true` adds BM25 indexing
@@ -108,9 +113,9 @@ so the field can be used with `SEARCH`.
 
 The response carries the collection id used in every data-plane path below.
 
-Creating definitions is often easier in the console or through the [Java SDK](java-sdk.md), which takes
-typed builders rather than hand-written JSON. The Swagger UI on `8081` has the exact schema for every
-field option.
+Creating definitions is often easier in the console or through an SDK - [Java](java-sdk.md) or
+[Python](python-sdk.md) - which takes typed objects rather than hand-written JSON. The Swagger UI on
+`8081` has the exact schema for every field option.
 
 ### Search
 
@@ -176,8 +181,8 @@ curl -sS http://localhost:8082/api-docs > openapi.json
 
 That is generated from the running server, so it cannot drift the way a hand-copied example in a manual
 can. When a body is rejected the response usually names the field - see [Errors](#errors) below. For
-anything beyond a quick curl, the [Java SDK](java-sdk.md) is less work - it takes typed builders
-instead of JSON.
+anything beyond a quick curl, an SDK is less work - [Java](java-sdk.md) and [Python](python-sdk.md)
+both take typed objects instead of JSON.
 
 ## Errors
 
@@ -211,7 +216,7 @@ similarityFunction: ... not one of the values accepted for Enum class: [COSINE, 
 ```
 
 Not every `400` can be attributed to a single field. A request the server parsed but rejected on its
-merits carries the reason without a property - `At least one vector field is required` - and a body that
+merits carries the reason without a property - `Vector field names must be unique` - and a body that
 is not valid JSON at all reports the parse position instead, since there is no field to point at.
 
 A `401` on a call that worked a few minutes ago is almost always the 300-second token expiry. Server-side

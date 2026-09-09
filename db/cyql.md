@@ -37,7 +37,8 @@ RETURN m.title, score(m)
 
 - `$qv` is a **vector** parameter - the query embedding, supplied with the statement. `SIMILAR TO`
   does not accept text and does not embed anything for you; compute the vector with the same model
-  the field was written with. [Java SDK](java-sdk.md) shows a request carrying one.
+  the field was written with. [Java SDK](java-sdk.md) and [Python SDK](python-sdk.md) each show a
+  request carrying one.
 - `ON embedding` names the vector field, so a record with several vector fields can be searched on
   each independently.
 - `TOP 5` is how many nearest neighbours to consider. It takes a literal, not a parameter.
@@ -191,9 +192,10 @@ SHOW COLLECTIONS
 DESCRIBE COLLECTION articles
 ```
 
-Those are three separate statements; send them one at a time. A collection needs at least one
-vector field, and `CARDINALITY` picks the index: `HIGH` for values that are nearly unique per
-record, `LOW` for a small repeated set. `FULLTEXT` is what makes a field usable with `SEARCH`.
+Those are three separate statements; send them one at a time. A collection does not need a `VECTOR`
+field - declare only metadata and you get a document store without similarity search. `CARDINALITY`
+picks the index: `HIGH` for values that are nearly unique per record, `LOW` for a small repeated set.
+`FULLTEXT` is what makes a field usable with `SEARCH`.
 
 `ALTER COLLECTION` adds fields and indexes to something that already holds data.
 

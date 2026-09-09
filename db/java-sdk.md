@@ -38,13 +38,64 @@ Then the repository and the dependency in your project:
     <dependency>
         <groupId>ai.cyrock.db</groupId>
         <artifactId>cyrock-db-client-java</artifactId>
-        <version>0.9.0</version>
+        <version>0.9.1</version>
     </dependency>
 </dependencies>
 ```
 
 The `id` in `settings.xml` and in `<repositories>` must match - that is how Maven knows which
 credentials to send. The SDK needs Java 21, and pulls in gRPC but no Spring and no storage engine.
+
+## Protobuf compatibility
+
+The SDK's generated gRPC classes are compiled against Protobuf **4.31.1** and bring
+`com.google.protobuf:protobuf-java` along with them. Protobuf's rule here runs one way only: the
+`protobuf-java` on your classpath may be newer than the version the classes were generated against,
+never older. Generating against 4.31.1 rather than the newest release is deliberate - it leaves room
+for applications whose own dependency management holds Protobuf at an older 4.x version than the SDK
+would otherwise bring.
+
+A version your build manages wins over the one the SDK asks for. Spring Boot 4.1 and later manage
+Protobuf through a property, so that is where to move it if you need to. Anything from 4.31.1 upwards
+works; 4.35.1 below is the version the SDK resolves on its own, and the one it is tested against:
+
+```xml
+<properties>
+    <protobuf-java.version>4.35.1</protobuf-java.version>
+</properties>
+```
+
+Below 4.31.1, the first generated class your code touches throws `ProtobufRuntimeVersionException` -
+see [Troubleshooting](troubleshooting.md). Protobuf 3.x is a different major version and is not
+supported.
+
+To take the SDK together with the gRPC and Protobuf versions it was tested against, import the BOM
+instead of pinning anything yourself:
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>ai.cyrock.db</groupId>
+            <artifactId>cyrock-db-bom</artifactId>
+            <version>0.9.1</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+<dependencies>
+    <dependency>
+        <groupId>ai.cyrock.db</groupId>
+        <artifactId>cyrock-db-client-java</artifactId>
+    </dependency>
+</dependencies>
+```
+
+Maven takes the first managed version it finds, so an import only wins over the imports below it: if
+your framework's BOM is imported first, its Protobuf and gRPC versions stay in force and this one
+changes nothing.
 
 ## Connecting
 
@@ -82,8 +133,10 @@ request, and close it on shutdown (or let try-with-resources do it).
 
 ## Creating a collection
 
-Fields come in two lists: vector fields and metadata fields. **At least one vector field is
-required.**
+Fields come in two lists: vector fields and metadata fields. **The vector list may be empty**: a
+collection without a vector field is a document store with metadata filtering, and only similarity
+search is unavailable on it. Full-text search is available on top of that for each STRING field
+declared with `fulltext` - the fourth constructor argument below, `false` in both of these fields.
 
 ```java
 CollectionDefinition definition = CollectionDefinition.builder()
@@ -166,6 +219,103 @@ for (Map<String, Object> row : result.rows())
 `QueryParameters` rather than concatenating them into the statement; `.vector(name, float[])` binds a
 vector for a `SIMILAR TO $v` clause.
 
+## Calling asynchronously
+
+Every method above blocks: the calling thread waits for the round trip. That is what you want for a
+script, and what you do not want when several calls could be in flight at once - fifty searches would
+need fifty threads, each doing nothing but waiting.
+
+`client.async()` returns the same operations returning `CompletableFuture`:
+
+```java
+import ai.cyrock.db.client.java.CyrockDbAsyncClient;
+
+CyrockDbAsyncClient async = client.async();
+
+CompletableFuture<List<Match>> matches = async.search(collectionId,
+    SearchRequest.builder("vector", queryVector, 10).build());
+```
+
+It shares the synchronous client's connection, its key exchange and its lifecycle. There is nothing
+extra to build and nothing extra to close - closing the synchronous client closes both.
+
+### Fanning out
+
+The point of it. These fifty searches share one connection and no threads wait:
+
+```java
+List<CompletableFuture<List<Match>>> pending = queries.stream()
+    .map(query -> async.search(collectionId,
+        SearchRequest.builder("vector", query, 10).build()))
+    .toList();
+
+CompletableFuture
+    .allOf(pending.toArray(new CompletableFuture[0]))
+    .join();
+
+List<List<Match>> results = pending.stream().map(CompletableFuture::join).toList();
+```
+
+### Ordering: chain what depends, fan out what does not
+
+Two futures started together have **no** order. Fired alongside its own write, a read may not see it.
+When the second call depends on the first, chain them:
+
+```java
+CompletableFuture<Document> written = async
+    .upsert(collectionId, -1L, Map.of("vector", VectorInput.of(vector)), metadata)
+    .thenCompose(id -> async.getById(collectionId, id));
+```
+
+This is the one habit to carry over from the blocking API, where statement order gave you the
+ordering for free.
+
+Concurrent writes to the same collection are applied in the order they **arrive**, which is not
+necessarily the order you submitted them in. Fanning writes out is fine when they are independent;
+when one must follow another, chain it.
+
+### Failures
+
+A future completes exceptionally rather than throwing. `CompletableFuture` wraps the cause, so unwrap
+one level before matching on it:
+
+```java
+async.getDocument(collectionId, externalKey)
+    .exceptionally(error ->
+    {
+        Throwable cause = error instanceof CompletionException && error.getCause() != null
+            ? error.getCause()
+            : error;
+        System.err.println(cause.getMessage());
+        return null;
+    });
+```
+
+`join()` and `get()` wrap it the same way. What is inside is the `CyrockDbClientException` the
+synchronous client would have thrown for the same failure - the same subtype and the same status code,
+since both surfaces share one mapping - so a catch block moving across only needs the unwrap. Once
+unwrapped, [the subtypes](#errors) apply unchanged, `RetryableException` included, which matters most
+here: a caller holding many calls in flight is exactly the one who wants to retry the two failures
+resending can fix.
+
+### Threading
+
+A continuation attached without an executor runs on a gRPC transport thread. Keep those short, and
+give anything that blocks - or touches a UI - an executor of its own:
+
+```java
+async.search(collectionId, request)
+    .thenAcceptAsync(this::render, myExecutor);
+```
+
+Cancelling a returned future cancels the call, so a caller who stops caring stops costing the server
+work.
+
+### Which to use
+
+Both APIs are the same operations against the same server, and mixing them on one client is fine.
+Reach for the asynchronous one when calls overlap; the blocking one reads better when they do not.
+
 ## Transactions
 
 ```java
@@ -180,23 +330,61 @@ List<GraphOperation>)`.
 ## Errors
 
 Everything the client throws is a `CyrockDbClientException`, an unchecked exception carrying the
-server's message:
+server's message and a status code. The code is **always an HTTP status**, never the gRPC status number
+the transport uses underneath - a server that is not serving requests reads as 503, not as the 14 the
+wire calls it. Do not read a retry rule off the number, though: some `4xx` report the server's condition
+rather than a bad request - 429 while it sheds load, 409 on a conflict - so branch on the subtypes
+instead:
 
 ```java
 try
 {
-    client.getDocument(collectionId, documentId);
+    client.getDocument(collectionId, externalKey);
+}
+catch (final CyrockDbClientException.NotFoundException e)
+{
+    // The document is not there - for this caller that is an answer, not a failure.
+}
+catch (final CyrockDbClientException.RetryableException e)
+{
+    // The server was unreachable, or it did not answer in time: resending can work.
+    retryWithBackoff();
 }
 catch (final CyrockDbClientException e)
 {
-    // Not found, permission denied, invalid request, transport failure.
-    System.err.println(e.getMessage());
+    System.err.println(e.getStatusCode() + " " + e.getMessage());
+    throw e;
 }
 ```
 
-There is deliberately no subtype per failure mode in this release - branch on the message if you must,
-but treat that as temporary. Token expiry is **not** something to handle: the client re-exchanges
-automatically.
+The failures worth branching on have a subtype, so the decision does not have to be arithmetic on a
+status code:
+
+| Subtype | Status | Thrown when |
+|---|---|---|
+| `NotFoundException` | 404 | The collection, graph, document or node does not exist |
+| `ForbiddenException` | 403 | Authenticated, but not permitted to do this |
+| `UnauthorizedException` | 401 | Not authenticated, or the API key was refused |
+| `UnavailableException` | 503 | The server could not be reached, or was reached but is not serving this request right now - a restart, a deployment, a dropped connection |
+| `DeadlineExceededException` | 504 | The call did not finish within its deadline |
+| `DurabilityNotConfirmedException` | 409 | The write **committed and is visible**, but the durability flush did not confirm |
+
+`UnavailableException` and `DeadlineExceededException` extend `RetryableException`, which is the type to
+catch when resending is the answer. A retryable failure says nothing about whether the request was
+applied - a deadline can expire on a write the server goes on to commit - so a non-idempotent operation
+needs the same care here as anywhere else.
+
+**`DurabilityNotConfirmedException` is the one worth handling deliberately, and the obvious reaction is
+wrong.** Do not retry it: the commit stands, so sending the request again applies it twice. The write is
+already readable. What is unconfirmed is only whether it would survive a power loss, so the useful
+responses are to verify it, to alert, or to reconsider the durability mode - not to repeat it. It is
+deliberately not a `RetryableException` for that reason.
+
+Anything without a subtype arrives as a plain `CyrockDbClientException` with its projected status - 400
+for an invalid argument or a failed precondition, 409 for a conflict, 429 when the server is shedding
+load, 500 for an internal failure, 501 for something this server does not implement.
+
+Token expiry is **not** something to handle: the client re-exchanges automatically.
 
 ## Graphs
 
@@ -303,3 +491,11 @@ public final class Example
 
 Set `CYROCK_DB_API_KEY` and `CYROCK_DB_PROJECT_ID` from the startup banner and run it. Nothing else is
 needed - no port, no token handling, no configuration file.
+
+## See also
+
+- [Getting started](getting-started.md) - standing up a server
+- [Python SDK](python-sdk.md) - the same API for Python
+- [REST API](rest-api.md) - the language-agnostic surface
+- [CyQL](cyql.md) - the query language
+- [Troubleshooting](troubleshooting.md)

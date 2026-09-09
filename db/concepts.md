@@ -31,6 +31,9 @@ is measured by cosine, dot product or euclidean distance - your choice per field
 A collection or graph can carry **several** vector fields. That is how multi-modal search works: an
 image embedding and a text embedding on the same record, searched independently or together.
 
+It can also carry **none**. A collection or graph that only ever needs filtering, traversal or
+full-text search does not have to declare a vector field to be created, and you can add one later.
+
 ## Metadata and filtering
 
 Everything that is not a vector is metadata, and it is indexed for filtering. Filters combine with
@@ -100,7 +103,7 @@ Two credential types, for two different lifetimes:
 - A **token** is short-lived, 300 seconds, and authorizes individual calls. You obtain one by
   presenting the API key.
 
-The Java SDK and the MCP server handle this exchange for you. Over REST you do it yourself - see
+The SDKs and the MCP server handle this exchange for you. Over REST you do it yourself - see
 [REST API](rest-api.md).
 
 ## Durability and transactions

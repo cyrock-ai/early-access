@@ -16,7 +16,7 @@ would for a single service:
 ```bash
 docker run --rm --name cyrock-db -p 8080:8080 -v cyrock-db-data:/data \
   -e JAVA_OPTS="-Xmx6g" \
-  cyrockai/db:0.9.0
+  cyrockai/db:0.9.1
 ```
 
 Guidance: 3 GB is fine for exploring with sample data. Give it 6-8 GB before loading hundreds of
@@ -43,7 +43,7 @@ provider, turn ONNX off in the same command:
 docker run --rm --name cyrock-db -p 8080:8080 -v cyrock-db-data:/data \
   -e CYROCK_DB_EMBEDDING_ONNX_ENABLED=false \
   -e CYROCK_DB_EMBEDDING_OPENAI_API_KEY=sk-... \
-  cyrockai/db:0.9.0
+  cyrockai/db:0.9.1
 ```
 
 Leave ONNX on and set an OpenAI key, and ONNX still wins while the key is ignored - worth knowing
@@ -111,7 +111,7 @@ docker run --rm --name cyrock-db -p 8080:8080 \
   -v cyrock-db-data:/data \
   -v "$PWD/imports:/imports:ro" \
   -e CYROCK_DB_DATA_IMPORT_PATH=/imports \
-  cyrockai/db:0.9.0
+  cyrockai/db:0.9.1
 ```
 
 A file at `imports/movies.csv` on your machine is then referred to as just `movies.csv`:
@@ -150,7 +150,7 @@ docker run -d --name cyrock-db \
   -v "$PWD/imports:/imports:ro" \
   -e JAVA_OPTS="-Xmx6g" \
   -e CYROCK_DB_DATA_IMPORT_PATH=/imports \
-  cyrockai/db:0.9.0
+  cyrockai/db:0.9.1
 ```
 
 That needs no external service and no provider account - embeddings are in-process by default, so there

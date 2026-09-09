@@ -1,7 +1,15 @@
 # Web console
 
 One console at <http://localhost:8080> covering both administration and data work. Sign in with a
-seeded login - `superadmin` / `superadmin` shows everything.
+seeded login - `superadmin` / `superadmin` has every permission in the seeded organization.
+
+It is not a platform-wide account: `superadmin` owns the seeded organization, so it administers that
+organization rather than the whole installation.
+
+The seeded logins do change what the console shows you - it reads the signed-in account's role and hides what
+that role cannot do. What they do not change is what the server would allow: in this evaluation setup every
+call the console makes carries one shared credential, so the console's gating is a faithful preview of the
+roles rather than a test of the server enforcing them. Configure an identity provider to exercise that.
 
 ## Two areas
 
@@ -14,6 +22,14 @@ is here.
 
 What you can see depends on your role, which is the point of the three seeded logins - sign in as
 `member` to see the console as someone with data access but no administrative power.
+
+## Help that follows you
+
+The question-mark button in the top bar opens a help panel that always describes the screen you are
+on, down to the individual tab of a collection or graph. It docks beside the content rather than over
+it, and it stays open or closed as you left it while you move around. Controls whose purpose is not
+obvious carry a tooltip, so the panel is for "what is this screen for" and the tooltips for "what
+does this field do".
 
 ## Sample datasets
 
@@ -45,6 +61,13 @@ configured, you define fields directly; nothing is lost.
 
 Each collection and graph has a query view: write [CyQL](cyql.md), run it, read the results as a table.
 
+The editor knows the language and it knows your schema. Keywords, functions and string literals are
+highlighted, completion offers the CyQL keywords and built-in functions alongside **your own
+fields** - the metadata, full-text and vector fields of the collection or graph you are looking at -
+and it narrows by context, so it offers field names after a `.`, full-text fields first in an `ON`
+clause and vector fields first after `SIMILAR TO`. Syntax is checked as you type and a mistake is
+marked in place, so a typo does not cost you a round trip to find out.
+
 Two things worth knowing:
 
 - **Use parameters.** The view has a parameter panel. It avoids quoting problems and is a better habit
@@ -60,14 +83,62 @@ Query history is kept, so an afternoon of exploration is recoverable.
 A graph opens as an interactive force-directed view, in 2D or 3D. Nodes are coloured by label and
 sized by connectivity.
 
+The controls above the canvas separate the two things you do to it. **Load data** opens a dialog:
+what to put on the canvas - a sample of the graph or one node and its neighbours - how much of it,
+and which labels to require or exclude. It fetches once, when you press Load. **Display** opens a
+panel for how what is there is drawn - layout, 2D or 3D, what the colour means - which changes
+nothing on the server. Beside them, **Fit view** frames what is loaded, and **Reset view** puts the
+whole view back to how it opened, including the label filter and an empty canvas.
+
+The line between the two reports what the canvas holds and whether a filter is narrowing it, so an
+active filter is visible without opening the dialog.
+
+Colouring by community needs a graph that has been through detection. If it has not, or if nothing
+currently on the canvas belongs to a community at the chosen level, the colouring cannot be applied:
+the selector goes back to colouring by label and the panel says which of those it was, directly
+under the selector.
+
 - Drag to reposition, scroll to zoom, click a node to see its fields.
 - Expand a node to pull in its neighbours, which is the natural way to explore outward from a search
   result.
 - The result of a query can be visualized rather than tabulated - run a traversal, then look at the
   shape of what came back.
+- The chips on the canvas are a legend, not the filter: each one is a label with its colour and its
+  count, and clicking one hides it locally without asking the server for anything.
 
 Visualization is for understanding structure, not for rendering everything. A view of a few hundred
 nodes is informative; a view of fifty thousand is a hairball. Filter or start from a search result.
+
+## Communities
+
+Community detection groups a graph into densely-connected clusters. The Communities tab shows what a
+detection run left: how many communities, at how many levels, and how many carry a written summary. It
+lists one level at a time, because the hierarchy is read from the fine end while a tree would bury it at
+the bottom - and on a real graph the coarsest level is usually one large community plus a long tail of
+singletons, which a size column shows honestly and a tree does not.
+
+Detecting is not free and it replaces whatever was there, so it asks first. Re-detecting keeps the ids of
+communities whose membership did not move, which is what lets their summaries survive.
+
+Selecting a community shows what it contains, and can push its member nodes into the Explorer or the
+Vectors view. Those are nodes, not communities: above the finest level a community's members are its
+child communities, and the view resolves that before handing anything on.
+
+## Community summaries and global search
+
+A community summary is a short report about one community. CYROCK.AI DB stores and searches them; the
+text is written by an application, and with a language model configured the console is one - it generates
+them bottom-up, so a broad community is summarised from its children's reports rather than from a sample
+of its thousands of entities.
+
+Read them before storing them. The console generates first and writes only when you say so, because that
+is the only point at which a report is cheap to fix: the model has already been paid for by then, and a
+report that is confidently about the wrong thing looks exactly like one that is right. You can edit any
+of them afterwards.
+
+Global Search then asks questions of those reports rather than of the nodes - "what themes recur across
+all of this", which no single node answers. It searches every level at once unless told otherwise. With
+no summaries stored it says so rather than reporting no results, because those are different problems.
 
 ## Natural language search
 
