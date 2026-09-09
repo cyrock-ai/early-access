@@ -12,7 +12,8 @@ CYROCK.AI DB replaces all of them with a single engine, with storage built in. N
 Redis, no Elasticsearch, no external vector store.
 
 This manual covers the Early Access release. Everything here is driven from one container image:
-the web console, the REST APIs, the Java SDK and the MCP endpoint for AI agents.
+the web console, the REST APIs, the Java and Python SDKs, the Spring AI and LangChain4j connectors,
+and the MCP endpoint for AI agents.
 
 ---
 
@@ -40,7 +41,8 @@ graph TD
     subgraph interfaces["How you reach it"]
         CONSOLE["Web console<br/>:8080"]
         REST["REST + Swagger<br/>:8081 · :8082"]
-        SDK["Java SDK<br/>gRPC :9090"]
+        SDK["Java + Python SDKs<br/>gRPC :9090"]
+        FW["Spring AI · LangChain4j<br/>via the Java SDK"]
         MCP["MCP for agents<br/>:8085/mcp"]
     end
 
@@ -58,6 +60,7 @@ graph TD
     CONSOLE --> engine
     REST --> engine
     SDK --> engine
+    FW --> SDK
     MCP --> engine
     engine --> STORE
 ```
@@ -87,6 +90,8 @@ Start at the top; the first chapter gets you running in a few minutes.
 | [CyQL](cyql.md) | The query language, by example: matching, traversal, vector similarity, paging, CSV loading. |
 | [REST API](rest-api.md) | The auth model and a curl walkthrough, plus the built-in Swagger UI. |
 | [Java SDK](java-sdk.md) | Adding the dependency, connecting, and CRUD, search and transactions. |
+| [Python SDK](python-sdk.md) | Installing the package, connecting, and the same API from Python, sync or async. |
+| [Framework connectors](framework-connectors.md) | Spring AI `VectorStore` and LangChain4j `EmbeddingStore`, plus the graph retrievers. |
 | [MCP for AI agents](mcp.md) | Connecting Claude and other MCP clients, and the tool catalogue. |
 | [Configuration](configuration.md) | Environment variables: storage, memory, embedding and LLM providers, telemetry. |
 | [Operations](operations.md) | Volumes and backup, health and metrics, logs, upgrading, sizing. |

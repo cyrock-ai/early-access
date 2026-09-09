@@ -1,7 +1,7 @@
 # MCP for AI agents
 
 The engine speaks the [Model Context Protocol](https://modelcontextprotocol.io/), so an AI agent can
-search, query and write through **39 tools** rather than through code you write and maintain.
+search, query and write through **40 tools** rather than through code you write and maintain.
 
 The endpoint is streamable HTTP at **`http://localhost:8085/mcp`**.
 
@@ -57,7 +57,7 @@ for ordinary work.
 
 ## The tool catalogue
 
-39 tools in four groups. Every name is prefixed `cyrock_db_`.
+40 tools in four groups. Every name is prefixed `cyrock_db_`.
 
 ### Collections (4)
 
@@ -73,7 +73,7 @@ for ordinary work.
 Reading, writing and searching documents: get by id or external key, list, upsert, delete, and vector
 or filtered similarity search.
 
-### Knowledge graphs (22)
+### Knowledge graphs (23)
 
 The largest group, covering graph and schema management, node and edge reads and writes, similarity
 search over node fields, one-hop neighbours, bounded traversal, context windows, graph branching, and
