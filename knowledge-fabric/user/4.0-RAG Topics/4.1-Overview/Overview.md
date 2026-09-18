@@ -20,21 +20,12 @@ or last quarter's reports. Asked about them, it either refuses or invents an ans
 **RAG — Retrieval-Augmented Generation** — fixes this by searching your documents *first* and handing
 the relevant passages to the model along with the question:
 
-```
-Question: "How many vacation days do I get after five years?"
-      │
-      ▼
-1. The question is converted into a vector (embedding model)
-      │
-      ▼
-2. The vector database returns the most similar passages
-   → "…after five years of service, entitlement rises to 30 days…"
-      │
-      ▼
-3. Question + passages go to the language model
-      │
-      ▼
-Answer: "After five years you are entitled to 30 days."  + source: hr-policy.pdf
+```mermaid
+flowchart TD
+    Q["Question:<br/>'vacation days after 5 years?'"] --> E["1 · Embed<br/>the question"]
+    E --> V["2 · Vector search<br/>finds passages"]
+    V --> L["3 · Question + passages<br/>→ language model"]
+    L --> A["Answer<br/>+ source: hr-policy.pdf"]
 ```
 
 The practical consequences:
@@ -72,29 +63,27 @@ This is where AI Knowledge Fabric differs from most chat products: the managemen
 the chatbot. **It generates and orchestrates containers.** Pressing *Start* on a Topic provisions real
 infrastructure.
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  Management application (this web UI)                           │
-│  · Stores the Topic's configuration in PostgreSQL               │
-│  · Generates a Compose file / Kubernetes manifests              │
-│  · Starts, stops, and deletes the stack                         │
-│  · Proxies chat, upload, and MCP calls over HTTP                │
-└────────────────┬────────────────────────────────────────────────┘
-                 │ starts, per Topic
-                 ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  Topic stack — one per Topic                                    │
-│                                                                 │
-│   rag-service        always. Ingestion, retrieval, chat, MCP     │
-│   vector database    only when no external one is configured     │
-│                      (embedded EclipseStore, own volume)         │
-│   Ollama             only when a model uses Ollama without an    │
-│                      external server                             │
-└─────────────────────────────────────────────────────────────────┘
-                 │ reaches out to
-                 ▼
-   AI servers (LM Studio, Ollama, OpenAI, Anthropic) ·
-   Docling servers · external vector databases · MCP tool servers
+```mermaid
+flowchart TD
+    APP["Management application<br/>(this web UI)"]
+    APP -- "starts, per Topic" --> STACK
+
+    subgraph STACK ["Topic stack"]
+        direction TB
+        RAG["rag-service<br/>(always on)"]
+        VECTOR["vector database<br/>(optional)"]
+        OLLAMA["Ollama<br/>(optional)"]
+    end
+
+    STACK -- "reaches out to" --> DEPS
+
+    subgraph DEPS ["External dependencies"]
+        direction LR
+        AI["AI servers"]
+        DOCLING["Docling servers"]
+        VDB["External vector DBs"]
+        MCP["MCP tool servers"]
+    end
 ```
 
 Three things follow from this design and explain most surprises:
@@ -126,7 +115,7 @@ Three things follow from this design and explain most surprises:
 | **Language model (LLM)** | Writes the answer from question + retrieved passages | AI Servers |
 | **Vector database** | Stores the vectors. Embedded by default, or an external instance | Vector Databases |
 | **Docling server** | Converts PDF/DOCX/PPTX into clean text before embedding | Docling Servers |
-| **Vision model** | Describes images so their content becomes searchable | AI Servers |
+| **Image Describer Model** | Describes images encountered during ingestion so their content becomes searchable. Can be a dedicated model, or the Topic's own Language Model (non-Anthropic, vision-capable) | AI Servers, or inherited from the Topic's own Language Model |
 | **Retrieval strategy** | How passages are found and ranked | Per Topic, step 4 of the wizard |
 | **System prompt** | Persona, tone, and rules | Globally + per Topic |
 
@@ -169,9 +158,12 @@ Browse available servers under **MCP Tools** in the main navigation.
 |---|---|
 | Plain text — `txt`, `md`, `json`, `yaml`, `csv`, source code | None |
 | PDF, DOCX, PPTX | A **Docling server**, to convert them to text |
-| Images | A **vision model**, to describe them |
+| Images | An **Image Describer Model** (can be the Topic's own Language Model, if it supports vision), to describe them |
 | Structured data (tables, records) | Optional import strategy, with an optional narrator model |
-| Audio / video | Selectable in the UI but **without real processing support today** — do not rely on it |
+
+> These three file categories — Plain text, Binary documents, Images — are freely combinable checkboxes
+> on the wizard's Models step, not a single fixed "datasource type" choice. There is no separate
+> audio/video category any more; neither ever had real processing support.
 
 ---
 
@@ -198,6 +190,7 @@ Browse available servers under **MCP Tools** in the main navigation.
 - [Configuration and functions](../4.3-Configuration/Configuration.md)
 - [Chat window](../4.4-Chat/Chat-Window.md)
 - [REST interface](../4.5-REST-API/REST-API.md)
+- [Glossary](../4.6-Glossary/Glossary.md)
 - [Connect an AI Server](../../3.0-Configuration/3.1-AI-Server/Connect%20LM%20Studio%20AI%20Server.md)
 - [Connect Vector DB](../../3.0-Configuration/3.2-Vector-DB%C2%B4s/Connect-Vector-DB.md)
 - [Global LLM Configuration](../../3.0-Configuration/3.3-Global%20LLM%20configuration/Global-LLM-Configuration-and-Prompt-Templates.md)

@@ -31,7 +31,7 @@ volume, or want several Topics to share one storage backend.
 | **QDRANT** | gRPC | `6334` | API Key | **The gRPC port, not the REST port `6333`** — see [Qdrant is gRPC](#qdrant-is-grpc-not-rest) |
 | **MILVUS** | gRPC | `19530` | Username / Password | Milvus uses native RBAC |
 | **WEAVIATE** | HTTP | `8080` | API Key | The HTTP port. Weaviate has stricter naming rules — see [Collection naming](#5-collection-naming-sharing-one-instance) |
-| **CYROCK_DB** | HTTP | `9092` | API Key | Requires an additional **Project ID** |
+| **CYROCK_DB** | gRPC | `9090` | API Key (fixed) | Requires an additional **Project ID**, which is a **UUID** — see [CYROCK.DB](#cyrockdb-fixed-port-fixed-authentication) |
 
 The port and authentication values above are **pre-filled when you pick a type** for a *new* entry,
 and **Use TLS** starts switched off. Override them if your instance differs (a self-hosted instance
@@ -91,6 +91,25 @@ moved**, because the correct value is the same either way.
 > console shows the **REST** endpoint (`…:6333`), so the port it fills in has to be corrected to
 > `6334`. The dialog warns you when that happens.
 
+### CYROCK.DB: fixed port, fixed authentication
+
+CYROCK.DB is reached over **gRPC on port `9090`**, and unlike the managed offerings above **TLS does
+not move the port** — the same port serves encrypted and unencrypted connections, so ticking **Use
+TLS** encrypts the channel and leaves `9090` in place. The dialog does not rewrite the port for this
+type.
+
+Two more fields are not choices here:
+
+- **Authentication is always `API Key`.** CYROCK.DB has no anonymous mode and no username/password
+  mechanism, so the picker is fixed to `API Key` for this type and the key is required. `None` would
+  describe an entry that can never connect.
+- **The Project ID is a UUID**, not a project name — the id shown in CYROCK.DB for the project, e.g.
+  `123e4567-e89b-12d3-a456-426614174000`. A name is rejected on **Save**, because it would otherwise
+  be passed to the Topic container unchanged and fail only when that container first connects.
+
+> The **same server** can also be registered under **Admin → Graph Databases** for GraphRAG topics.
+> The port, the API-key requirement and the Project ID rule are identical there.
+
 ---
 
 ## 3. Register the database
@@ -115,12 +134,12 @@ or `grpc://…:6333` on a Qdrant instance — is visibly wrong before you ever r
 | **Name** | Yes | Free-form display name, e.g. `Qdrant Production`. Shown in the Topic wizard |
 | **Type** | Yes | One of the four types above. Changing it re-applies the port/auth defaults |
 | **Host** | Yes | Hostname or IP only — **no protocol, no port, no path**. Pasting a full URL is fine; it is split into the Host/Port/Use TLS fields automatically. See [Choosing the Host value](#choosing-the-host-value) |
-| **Port** | Yes | Pre-filled with the *self-hosted* default per type. The label states the protocol (`Port (gRPC)` for Qdrant and Milvus). Qdrant needs its **gRPC** port — see [Qdrant is gRPC](#qdrant-is-grpc-not-rest). Weaviate Cloud and Zilliz need `443` — see [Managed clusters](#managed-clusters-and-tls) |
-| **Use TLS** | No | Off by default. Enable it for any endpoint that requires TLS, which includes every managed cluster. Enabling it sets the port to `443` if the port is still at its type default — except for Qdrant, whose port is the same either way |
-| **Authentication** | Yes | `None`, `API Key`, or `Username / Password`. The credential fields below appear accordingly |
-| **API Key** | If `API Key` | Stored in the platform and delivered to the Topic containers |
+| **Port** | Yes | Pre-filled with the *self-hosted* default per type. The label states the protocol (`Port (gRPC)` for Qdrant, Milvus and CYROCK.DB). Qdrant needs its **gRPC** port — see [Qdrant is gRPC](#qdrant-is-grpc-not-rest). Weaviate Cloud and Zilliz need `443` — see [Managed clusters](#managed-clusters-and-tls) |
+| **Use TLS** | No | Off by default. Enable it for any endpoint that requires TLS, which includes every managed cluster. Enabling it sets the port to `443` if the port is still at its type default — except for Qdrant and CYROCK.DB, whose ports are the same either way |
+| **Authentication** | Yes | `None`, `API Key`, or `Username / Password`. The credential fields below appear accordingly. **Fixed to `API Key` for CYROCK.DB**, which supports nothing else |
+| **API Key** | If `API Key` | Stored in the platform and delivered to the Topic containers. Required for CYROCK.DB |
 | **Username** / **Password** | If `Username / Password` | Milvus RBAC credentials |
-| **Project ID** | If type is `CYROCK_DB` | The CYROCK.DB project the collections are created under. Validation rejects an empty value for this type |
+| **Project ID** | If type is `CYROCK_DB` | The CYROCK.DB project the collections are created under, as a **UUID** — the project's id, not its name. Validation rejects an empty value and a non-UUID for this type |
 | **Description** | No | Free-form note for your own documentation |
 
 Click **Save**.
@@ -279,6 +298,9 @@ Topic or move the Topic to an external vector database.
 | Topic starts, but every answer says nothing was found | The Topic points at an empty collection — either nothing has been ingested yet, or the vector database was changed after ingestion. Re-upload the documents |
 | Weaviate rejects the collection | Weaviate's naming rules. The platform already generates a compliant `Topic_…` class name; if it still fails, check the Weaviate version's own restrictions |
 | CYROCK_DB: "Project ID is required" | The Project ID field is mandatory for this type and must not be blank |
+| CYROCK_DB: "Project ID must be a UUID" | A project **name** was entered. Use the project's id, e.g. `123e4567-e89b-12d3-a456-426614174000` — see [CYROCK.DB](#cyrockdb-fixed-port-fixed-authentication) |
+| CYROCK_DB: "An API key is required" | This type authenticates with an API key only, so the field cannot be left empty and the Authentication picker cannot be changed |
+| CYROCK_DB entry created before this release shows port `9092` | `9092` was the old default. Existing entries are left untouched on purpose; correct the port to `9090` by hand if it is wrong, then restart any Topic using it |
 | Documents were ingested, but the external database stays empty | The Topic is probably using the embedded EclipseStore — no database was selected in the wizard. Check **Topic detail → Configuration** |
 | Storage in the external database keeps growing after deleting Topics | Collections of deleted Topics may remain. Clean them up in your database using the `topic_…` / `Topic_…` naming scheme |
 

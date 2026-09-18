@@ -33,7 +33,7 @@ each section below opens with a quick start you can paste into a terminal.
 | Product | What it is | Manual |
 |---|---|---|
 | **[CYROCK.AI DB](#cyrockai-db)** | The Unified AI Data Engine — vector search, knowledge graphs, agentic memory and hybrid retrieval in a single engine, with storage built in | [db/README.md](db/README.md) |
-| **[AI Knowledge Fabric](#ai-knowledge-fabric)** | RAG chatbots, agents and visual pipelines, configured through a web interface that provisions the container stacks underneath | [knowledge-fabric/README.md](knowledge-fabric/README.md) |
+| **[AI Knowledge Fabric](#ai-knowledge-fabric)** | RAG and GraphRAG chatbots, agents and visual pipelines, configured through a web interface that provisions the container stacks underneath | [knowledge-fabric/README.md](knowledge-fabric/README.md) |
 
 ---
 
@@ -128,6 +128,12 @@ and other MCP clients can search, query and write directly. See [db/mcp.md](db/m
 through a web interface — a chatbot grounded in your own documents, an agent that works through a
 multi-step task, a pipeline drawn on a canvas — and the platform generates and orchestrates the
 container stacks underneath, on either Docker Compose or Kubernetes.
+
+Topics come in two kinds. A **RAG Topic** answers from the passages your documents contain. A
+**GraphRAG Topic** also extracts the entities and relationships behind them, so it can answer how two
+things are connected, or summarise the themes across a whole corpus — questions that chunk-level
+search structurally cannot reach. See
+[GraphRAG Topics](knowledge-fabric/README.md#6--graphrag-topics).
 
 Full documentation: **[knowledge-fabric/README.md](knowledge-fabric/README.md)**
 

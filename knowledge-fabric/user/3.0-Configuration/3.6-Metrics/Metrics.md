@@ -39,7 +39,7 @@ If either is wrong, the dashboard stays empty and shows demo data.
 
 | Type | Recorded when |
 |---|---|
-| `TOPIC_CHAT` | A Topic answers a chat request |
+| `TOPIC_CHAT` | A Topic answers a chat request — a GraphRAG Topic's chats are reported under this same type and appear indistinguishably in **Topic Requests** and the other Topic-labelled figures |
 | `AGENT_CALL` | An Agent handles a call |
 | `PIPELINE_RUN` | A Pipeline executes |
 

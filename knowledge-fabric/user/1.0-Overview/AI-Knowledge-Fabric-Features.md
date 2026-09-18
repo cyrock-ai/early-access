@@ -72,12 +72,6 @@
 
 ## GraphRAG Topic Server
 
-> **Not part of this Early Access release.** GraphRAG Topics appear in the navigation menu and can be
-> created and configured, but the feature is still in development and does not work end to end. The
-> capabilities below describe where it is going, not what you can rely on today — build with
-> [RAG Topics](../4.0-RAG%20Topics/4.1-Overview/Overview.md) and
-> [Agents](../5.0-Agents%20and%20Pipelines/5.1-Overview/Overview.md) instead.
-
 - Configuration of a GraphRAG system via a graphical user interface
 - Unstructured / structured data-to-graph converter
 - Automatic insertion into the graph database

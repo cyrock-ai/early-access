@@ -17,8 +17,12 @@ into the flow as a step.
 
 | Field | Required | Meaning |
 |---|---|---|
-| Topic (`topicId`) | **Yes** | Select an existing AI Topic |
+| Topic (`topicId`) | **Yes** | Select an existing AI Topic — a regular RAG Topic, or a GraphRAG Topic |
 | Tool Filter (`toolFilter`) | No | Exact tool names to expose to the agent. Empty allows all |
+
+> **A GraphRAG Topic can be selected here too**, resolved against its own MCP endpoint the same way a
+> RAG Topic is. GraphRAG is still work in progress platform-wide — treat wiring one into a pipeline as
+> experimental until that feature is picked up again.
 
 ## Use cases
 

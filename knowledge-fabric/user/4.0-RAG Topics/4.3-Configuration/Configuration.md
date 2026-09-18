@@ -25,11 +25,16 @@ covers each one.
 The six tabs sit across the top of every Topic page. Fields are read-only until you click **Edit** in
 the top right.
 
-The same fields as the creation wizard — name, description, prompt, port, roles, models, Docling,
-vector database, retrieval strategy, chat attachments — now on one editable page. See
-[Creation step by step](../4.2-Creation/Creation-Step-by-Step.md) for what each field means.
+The same fields as the creation wizard — name, description, prompt, port, roles, models, file types,
+Docling, image handling, vector database, retrieval strategy, chat attachments — now on one editable
+page. See [Creation step by step](../4.2-Creation/Creation-Step-by-Step.md) for what each field means.
 
 Requires `TOPIC_EDIT`.
+
+> **There is no separate "confirm the model is vision-capable" checkbox any more.** Ticking **Images**
+> under Chat Attachments is itself the only signal that the chat model can see images — nothing
+> verifies it automatically, so an incorrect tick surfaces as garbled or ignored image attachments
+> rather than an upfront error.
 
 Two fields deserve repeating, because changing them here has consequences the form does not spell out:
 
@@ -83,8 +88,9 @@ for Topics on a cloud provider.
 Where documents enter the knowledge base. Requires `TOPIC_UPLOAD` — without it the upload area is
 hidden and only the file lists are visible.
 
-Note the line of accepted extensions under the drop zones: it is derived from the Topic's configured
-content type, so a Topic set to Plaintext will refuse a PDF here.
+Note the line of accepted extensions under the drop zones: it is derived from the Topic's allowed file
+types (Configuration tab → Models section), so a Topic with only **Plain text** ticked will refuse a
+PDF here.
 
 ### Uploading
 
@@ -95,8 +101,8 @@ Two drop zones, side by side:
 | **Select Files** / *Drop files here* | Individual files |
 | **Select Folder** / *Drop folder here* | A whole directory at once |
 
-Up to **500 files** per selection. If the Topic has a datasource type set, the file picker is
-restricted to that type's extensions — a convenience filter, not the real validation.
+Up to **500 files** per selection. If the Topic has any file types restricted, the file picker is
+limited to those extensions — a convenience filter, not the real validation.
 
 Then press **Start Embedding**. Files are uploaded and embedded one by one, with a progress line
 (*Uploading… 3 / 12 done*) and a per-file status marker.
@@ -244,4 +250,5 @@ Requires the log permissions (`TOPIC_LOGS` / `LOGS_READ`) — note the caveat ab
 - [Overview](../4.1-Overview/Overview.md)
 - [Creation step by step](../4.2-Creation/Creation-Step-by-Step.md)
 - [Chat window](../4.4-Chat/Chat-Window.md)
+- [Glossary](../4.6-Glossary/Glossary.md)
 - [Global LLM Configuration](../../3.0-Configuration/3.3-Global%20LLM%20configuration/Global-LLM-Configuration-and-Prompt-Templates.md)
