@@ -353,3 +353,4 @@ Note that `prompt` and `memoryId` are form fields, not JSON — the endpoint is 
 - [Chat window](../4.4-Chat/Chat-Window.md) — the same operations in the UI
 - [Configuration and functions](../4.3-Configuration/Configuration.md) — attachment types, timeouts, chunk inspection
 - [Roles & Permissions](../../3.0-Configuration/3.5-Users-Roles-and-Authentication/Roles-and-Permissions.md) — granting `API_ACCESS`
+- [Glossary](../4.6-Glossary/Glossary.md)

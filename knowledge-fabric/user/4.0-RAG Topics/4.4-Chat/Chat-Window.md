@@ -111,7 +111,12 @@ Which types are accepted depends on the Topic's **Chat Attachments** setting:
 |---|---|
 | Plain text — txt, md, json, yaml, csv, source code | None |
 | Binary documents — PDF, DOCX, XLSX, PPTX | Docling configured for the Topic |
-| Images — JPG, PNG, GIF, WEBP, BMP, TIFF | A vision-capable chat model, confirmed in the Topic's settings |
+| Images — JPG, PNG, GIF, WEBP, BMP, TIFF | **Allow images as chat attachments** enabled in the Topic's settings |
+
+An attached image goes straight to the Topic's own chat model, not to any Image Describer Model the
+Topic may have configured for ingestion — the two roles are independent, and enabling image attachments
+is itself the only claim that the chat model can actually see images. Nothing checks that
+automatically.
 
 The file picker filters by these types, but that is only a convenience — the rag-service is the real
 gatekeeper and rejects a disallowed attachment with a clear message.
@@ -167,7 +172,7 @@ just wait, if a container was restarting) and retry the same message.
 | A source badge is grey and says the link expired | Normal after ~10 minutes, and always so in **History**. Ask the question again |
 | Sources listed but the download fails | The rag-service is no longer reachable — check the Topic's status and Logs tab |
 | The 📎 button rejects everything | No attachment types are enabled in the Topic's configuration |
-| Images rejected despite being enabled | The vision-capable checkbox is unticked, or the model cannot actually see images |
+| Images rejected despite being enabled | Check **Allow images as chat attachments** in the Topic's Configuration; if it's ticked, the chat model itself likely cannot see images |
 | A conversation disappeared | Closing a chat tab deletes it. Use **History** to keep conversations |
 | Reply never arrives, Stop does nothing | The rag-service is wedged. Check the Logs tab; restart the Topic if needed |
 
@@ -178,3 +183,4 @@ just wait, if a container was restarting) and retry the same message.
 - [Overview](../4.1-Overview/Overview.md)
 - [Configuration and functions](../4.3-Configuration/Configuration.md) — attachments, timeouts, retrieval tuning
 - [REST interface](../4.5-REST-API/REST-API.md) — the same chat from a script
+- [Glossary](../4.6-Glossary/Glossary.md)

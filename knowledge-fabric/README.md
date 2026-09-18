@@ -26,9 +26,6 @@ Please read this first — it shapes what you may do with the software.
   multi-tenant infrastructure, and port 8080 should not face the internet directly — see
   [the installation guide](user/2.0-Installation/docker-compose-installation.md) for the reverse-proxy
   setup.
-- **GraphRAG Topics are not part of this release.** The navigation menu and the feature list mention
-  them, and they are described in these pages, but the feature is still in development and does not
-  yet work end to end. Build with RAG Topics, Agents and Pipelines.
 
 The full terms are in the
 [CYROCK.AI Early Access End-User License Agreement](https://github.com/cyrock-ai/early-access/blob/main/LICENSE).
@@ -58,7 +55,7 @@ Prefer to pick the pieces yourself:
 |---|---|
 | [Getting Started](user/1.0-Overview/Getting-Started.md) | The end-to-end walkthrough: install → models, Docling, vector DB → Topic wizard → upload and chunking → chat |
 | [User Guide](user/1.0-Overview/overview.md) | The three building blocks (Topics, Agents, Pipelines), MCP tools, logs, roles, and a getting-started checklist |
-| [Feature list](user/1.0-Overview/AI-Knowledge-Fabric-Features.md) | What the platform supports: RAG, agent pipelines, orchestration targets — plus GraphRAG, which is [not part of this release](#early-access-scope) |
+| [Feature list](user/1.0-Overview/AI-Knowledge-Fabric-Features.md) | What the platform supports: RAG, GraphRAG, agent pipelines, orchestration targets |
 
 ## 2 · Installation
 
@@ -107,6 +104,7 @@ A **Topic** is one self-contained chatbot that answers from documents you upload
 | [Configuration and functions](user/4.0-RAG%20Topics/4.3-Configuration/Configuration.md) | The detail view's tabs: configuration, data upload, MCP connections, actions and logs |
 | [Chat window](user/4.0-RAG%20Topics/4.4-Chat/Chat-Window.md) | Multi-tab chat, source citations, attachments, session handling |
 | [REST API](user/4.0-RAG%20Topics/4.5-REST-API/REST-API.md) | Calling upload and chat programmatically, with JWT authentication |
+| [Glossary](user/4.0-RAG%20Topics/4.6-Glossary/Glossary.md) | Chunking, retrieval, prompts, and every other term used across this section, in one place |
 
 ## 5 · Agents & Pipelines
 
@@ -120,6 +118,29 @@ An **Agent** executes multi-step tasks; a **Pipeline** is the visual definition 
 | [Module reference](user/5.0-Agents%20and%20Pipelines/5.4-Modules/README.md) | **All 28 palette modules**, one page each — see below |
 | [Integration](user/5.0-Agents%20and%20Pipelines/5.5-Integration/Integration.md) | MCP tools, calling Topics, nested pipelines, SSE tool servers |
 | [Agent chat](user/5.0-Agents%20and%20Pipelines/5.6-Chat/Agent-Chat.md) | Selecting a Pipeline per conversation and running it |
+
+## 6 · GraphRAG Topics
+
+A **GraphRAG Topic** is the graph-based sibling of a RAG Topic: it builds a knowledge graph of entities
+and relationships alongside the usual vector store, and answers each question with whichever of three
+retrieval strategies fits it — a precise entity lookup, a broad thematic summary, or both combined. Read
+the [RAG Topics](#4--rag-topics) section first if you have not already; this one only covers what is
+*different*.
+
+| Page | Contents |
+|---|---|
+| [Getting Started](user/6.0-GraphRAG%20Topics/6.1-Overview/Getting-Started.md) | What you need before you start, and the shortest path to a working GraphRAG Topic |
+| [Why GraphRAG, and the architecture](user/6.0-GraphRAG%20Topics/6.1-Overview/Overview.md) | What a graph buys you over plain RAG, and what actually runs when you press Start |
+| [How a prompt is answered — LOCAL, GLOBAL, HYBRID](user/6.0-GraphRAG%20Topics/6.1-Overview/Retrieval-Workflows.md) | The router, and what each of the three retrieval strategies actually does |
+| [How a document becomes graph](user/6.0-GraphRAG%20Topics/6.1-Overview/Ingestion-Workflow.md) | Extraction, deduplication, and how communities get (re)built |
+| [Models and their roles](user/6.0-GraphRAG%20Topics/6.2-Concepts/Models-and-Roles.md) | The seven model roles beyond chat and embedding, and which ones can be left to inherit |
+| [Retrieval strategies in detail](user/6.0-GraphRAG%20Topics/6.2-Concepts/Retrieval-Strategies.md) | Every tunable bound behind LOCAL, GLOBAL, and HYBRID |
+| [Glossary](user/6.0-GraphRAG%20Topics/6.2-Concepts/Glossary.md) | Entity, community, seed, subgraph, BM25, and every other term used across this section |
+| [The GraphRAG Topics page](user/6.0-GraphRAG%20Topics/6.3-Main-Page/Main-Page.md) | The list, its status badges, and starting/stopping a Topic |
+| [Creation step by step](user/6.0-GraphRAG%20Topics/6.4-Creation/Creation-Step-by-Step.md) | The four-step wizard, field by field |
+| [File types, Docling, and image handling](user/6.0-GraphRAG%20Topics/6.4-Creation/File-Types-Docling-Images.md) | Why the file-type checkboxes matter, Docling's role, and ingestion images vs. chat-attachment images |
+| [Configuration and functions](user/6.0-GraphRAG%20Topics/6.5-Configuration/Configuration.md) | The detail view's six tabs, including prompt overrides and recomputing communities on demand |
+| [Chat window](user/6.0-GraphRAG%20Topics/6.6-Chat/Chat-Window.md) | What's different from RAG chat: the LOCAL/GLOBAL/HYBRID badge, graph-sync source badges, and real mid-run cancellation |
 
 <details>
 <summary><b>All 28 modules</b> — click to expand</summary>
@@ -179,7 +200,7 @@ is **silently dropped** from the deployed pipeline.
 ## Finding your way around
 
 - **Numbered folders follow the order you would set things up in** — install (2), configure the
-  infrastructure (3), then build Topics (4) or Agents (5).
+  infrastructure (3), then build Topics (4), Agents (5), or GraphRAG Topics (6).
 - **Most section pages end with a Related section** linking sideways to what you are likely to need
   next. The per-module pages mostly do not — come back to the
   [module reference](user/5.0-Agents%20and%20Pipelines/5.4-Modules/README.md) to move between those.

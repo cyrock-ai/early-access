@@ -107,15 +107,14 @@ the endpoint is not reachable — the *Error* status in the list means the same 
 ### 2c. Connect or install the Docling server
 
 Docling converts PDF, DOCX, PPTX and XLSX into clean text before embedding. **Without it, a PDF cannot
-be indexed at all** — and the Topic wizard makes it mandatory as soon as you pick a binary datasource
-type.
+be indexed at all** — and the Topic wizard requires a server as soon as you tick **Binary documents**
+among the accepted file types (or allow them as chat attachments).
 
-Go to **Admin → Docling Servers**. A managed server named **`Local Docling`** is already seeded on
-first start, so usually there is nothing to create:
+Go to **Admin → Docling Servers**. No server is seeded by default, so add one:
 
 | You want | Do this |
 |---|---|
-| The platform to run Docling for you | Select `Local Docling` and press **Start**. The platform pulls `docling-serve-cpu` and starts the container |
+| The platform to run Docling for you | **Add Docling Server** → Server Type `Managed`, give it a name, then press **Start**. The platform pulls `docling-serve-cpu` and starts the container |
 | To use a Docling instance you already run | **Add Docling Server** → Server Type `External`, then Host and Port (default `5001`) |
 
 The first start pulls a multi-GB image; the status cell names the current phase (*Downloading the
@@ -123,8 +122,8 @@ Docling image (several GB)* → *Starting the container* → *Waiting for the Do
 together with the elapsed time. A **managed** server has no Host/Port fields — the URL is assigned
 when it starts.
 
-> **Plain text only?** Docling is not needed. You can skip this and pick datasource type *Plaintext*
-> in the wizard.
+> **Plain text only?** Docling is not needed. You can skip this and leave only *Plain text* ticked
+> among the wizard's file types.
 
 **Check:** the server's status is `RUNNING` (managed) or reachable (external).
 
@@ -175,17 +174,19 @@ Everything here is a **default**; each Topic can override all of it on its **LLM
 
 <a href="../../assets/screenshots/topic-wizard-step1.jpg"><img src="../../assets/screenshots/topic-wizard-step1.jpg" alt="Step 1 of the Topic wizard: name, description, RAG service port and access roles" width="45%"></a>
 
-Name (letters only, spaces become underscores), description, the **User System Prompt** that gives the
+Name (letters, digits, hyphens and underscores; spaces become underscores), description, the **User System Prompt** that gives the
 Topic its character, a free **RAG Service Port** on the host (8081, 8082, …), and the **Roles** allowed
 to use it. The prompt is inserted into the global template, so write only what is specific to this
 Topic — *"You are an HR assistant. Answer only from the policy documents."*
 
 **Step 2 — Models** · *the step that blocks progress*
 
-Pick the **Datasource type** first, because it reshapes the rest of the step: `Plaintext + Binary` and
-`Mixed` make **Docling mandatory**, `Images` and `Mixed` add the vision-model section. Then select the
-**embedding model** (it asks for the output dimension — keep the pre-filled native size) and the
-**chat model**.
+Tick the **File Types** you accept first, because it reshapes the rest of the step: ticking **Binary
+documents** brings in the Docling section, ticking **Images** brings in Image Handling and forces
+"Describe" so ingested images actually get processed. This step also carries the Topic's **Chat
+Attachments** settings now (moved here from what used to be a later step), since a binary or image
+attachment needs the same Docling/vision infrastructure as an upload. Then select the **embedding
+model** (it asks for the output dimension — keep the pre-filled native size) and the **chat model**.
 
 > If **Next** appears to do nothing here, one of the two models is not selected. Scroll to the bottom
 > of the step — both selectors and their inline errors are down there.
@@ -198,11 +199,9 @@ Pick the **Datasource type** first, because it reshapes the rest of the step: `P
 [2d](#2d-connect-a-vector-database-optional)).
 
 **Step 4 — Retrieval Strategy** — everything is pre-filled with working defaults (`HYBRID`, Top-K `3`,
-reranking `NONE`, minimum similarity `0.6`); you can pass straight through. This step also holds
-**Chat Attachments**: which file types users may attach to a message, plus the *Chat LLM is
-vision-capable* checkbox you tick to assert your model really can see images.
+reranking `NONE`, minimum similarity `0.6`); you can pass straight through.
 
-**Step 5 — Data Source** — source type, storage mode, and the chunking settings covered in
+**Step 5 — Data Source** — storage mode and the chunking settings covered in
 [4a](#4a-chunking-of-the-documents). The primary button reads **Save** instead of **Next** — that is
 how you know you are on the last step.
 
@@ -311,13 +310,13 @@ instead of flooding the field.
 | Type | Requirement |
 |---|---|
 | Plain text (txt, md, json, yaml, csv, source code) | None |
-| Binary documents (PDF, DOCX, XLSX, PPTX) | Docling, plus the type enabled in wizard step 4 |
-| Images (JPG, PNG, GIF, WEBP, …) | A vision-capable chat model, and the *vision-capable* checkbox ticked |
+| Binary documents (PDF, DOCX, XLSX, PPTX) | Docling, plus the type enabled in wizard step 2 |
+| Images (JPG, PNG, GIF, WEBP, …) | **Allow images as chat attachments** ticked in wizard step 2 — the chat model itself must be able to see images; nothing verifies that automatically |
 
 > **Attachments are ephemeral.** They are folded into the context for that one reply and **never
 > added to the knowledge base**. To add a document permanently, upload it on the Data Upload tab
 > ([step 4](#4-upload-documents)). A rejected attachment usually means the type was not enabled in
-> wizard step 4.
+> wizard step 2.
 
 📖 **Detail:** [Chat window](../4.0-RAG%20Topics/4.4-Chat/Chat-Window.md) — layout, sessions, sources,
 attachments, error handling, and how to get better answers

@@ -39,6 +39,10 @@ services:
       VECTOR_DB_IMAGE: ${VECTOR_DB_IMAGE:-pgvector/pgvector:pg16}
       # Allows the app to reach per-topic RAG containers via host-exposed ports
       RAG_SERVICE_HOST: host.docker.internal
+      # Allows the app to reach per-topic GraphRAG containers via host-exposed ports
+      GRAPHRAG_SERVICE_HOST: host.docker.internal
+      # Allows the app to reach per-agent containers via host-exposed ports
+      AGENT_SERVICE_HOST: host.docker.internal
       # Allows the app to reach Docling server containers via host-exposed ports
       DOCLING_SERVICE_HOST: host.docker.internal
     extra_hosts:
